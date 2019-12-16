@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)http://getbootstrap.com/docs/4.0/examples/dashboard/ -->
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>职位调整</title>
+    <script src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+    <link href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+    <link href="/assert/css/sider.css" rel="stylesheet">
+    <style type="text/css">
+        /* Chart.js */
+
+        @-webkit-keyframes chartjs-render-animation {
+            from {
+                opacity: 0.99
+            }
+            to {
+                opacity: 1
+            }
+        }
+
+        @keyframes chartjs-render-animation {
+            from {
+                opacity: 0.99
+            }
+            to {
+                opacity: 1
+            }
+        }
+
+        .chartjs-render-monitor {
+            -webkit-animation: chartjs-render-animation 0.001s;
+            animation: chartjs-render-animation 0.001s;
+        }
+    </style>
+    <script>
+
+
+
+        $(document).ready(function () {
+            //加载头部和左部
+            $('#head').load("/client/head.html");
+            $('#lefthead').load('/client/lefthead.html');
+//读取cookie
+            var Authorization=$.cookie('Authorization');
+            var username=$.cookie("username");
+            if (Authorization==null||username==null||Authorization==''||username==''){
+                window.location.href='/client/login.html';
+                return false;
+            }
+
+            //最大角色数量
+            maxauth=0;
+
+
+
+            //加载所有员工职位
+            $.ajax({
+                type:'post',
+                url:'http://localhost:8080/zuul_staff/findAllEmployee?',
+                headers:{"Authorization":"Bearer "+Authorization},
+                data: {
+                },
+                contentType:'application/x-www-form-urlencoded', //参数类型
+                timeout:50000,
+                success:function (result) { //该函数会自动把JSON解析为对象
+
+                    $.each(result,function (key,value) {
+                        //角色
+                        //alert("进入到循环");
+                        var auths='';
+                        var employeeAuths=result[key].employeeAuths;
+                        $.each(employeeAuths,function (key,value) {
+                            auths+=employeeAuths[key].authId+'.'+employeeAuths[key].employeeAuthoritie+'  ';
+                        });
+                        console.log(result[key].employeeId+auths+result[key].employeeName+result[key].employeeRegular+result[key].employeeEntryTime+(key+1));
+                        //整体
+                        var html='';
+                        html+='<tr><td>'+(key+1)+'</td>'+
+                            '<td>'+result[key].employeeId+'</td>'+
+                            '<td>'+result[key].employeeName+'</td>'+
+                            '<td>'+auths+'</td>'+
+                            '<td>'+result[key].employeeRegular+'</td>'+
+                            '<td>'+result[key].employeeEntryTime+'</td>'+
+                            '<td><button onclick="findAuthByEmployee('+result[key].employeeId+')" type="button" class="btn btn-sm btn-warning " data-toggle="modal" data-target="#deleteAuthModal" data-whatever="@mdo">职位删除</button></td>' +
+                            '</tr>';
+                        //
+                        $('#tbody').append(html);
+                    });
+
+                },
+                error:function (xhr) {
+                    if (xhr.status=='404'){
+                        alert("请求失败，请刷新页面！");
+                    }else if (xhr.status=='403'){
+                        alert("您没有权限欧！")
+                        window.location.href='/client/index.html';
+                    }else if (xhr.status=='500'){
+                        alert("您没有权限欧！");
+                        window.location.href='/client/index.html';
+                    }
+                }
+            });
+
+
+            //职位添加
+            $('#addauth').click(function () {
+                var employeeId=$('#employeeId').val();
+                var employeeAuthoritie=$('#employeeAuthoritie').val();
+
+                $.ajax({
+                    type:'post',
+                    url:'http://localhost:8080/zuul_staff/addEmployeeAuthByEmployeeId?',
+                    headers:{"Authorization":"Bearer "+Authorization},
+
+                    data: {
+                        employeeId:employeeId,
+                        employeeAuthoritie:employeeAuthoritie
+                    },
+                    contentType:'application/x-www-form-urlencoded', //参数类型
+                    timeout:50000,
+                    beforeSend:function(){
+                        if ($.trim(employeeId)==''||$.trim(employeeAuthoritie)==''
+                        ){
+                            alert('添加信息不能为空');
+                            return false;
+                        }
+                    },
+
+                    success:function (result) {
+                        if (result!=0){
+                            alert(employeeId+'添加角色'+employeeAuthoritie+'成功！');
+                            window.location.reload();
+                        }else {
+                            alert('添加失败，请检查输入信息！');
+                        }
+                    },
+
+                    error:function (xhr) {
+                        if (xhr.status=='404'){
+                            alert("请求失败，请刷新页面！");
+                        }else if (xhr.status=='403'){
+                            alert("您没有权限欧！")
+                        }else if (xhr.status=='500'){
+                            alert("账号已过期，请重新登录！");
+                            window.location.href='/client/login.html';
+                        }
+                    }
+                });
+            });
+
+
+            //职位更新
+            $('#upppdateAuth').click(function () {
+                var authId=$('#authId').val();
+                var updateEmployeeAuthoritie=$('#updateEmployeeAuthoritie').val();
+
+                $.ajax({
+                    type:'post',
+                    url:'http://localhost:8080/zuul_staff/updateEmployeeAuthoritie?',
+                    headers:{"Authorization":"Bearer "+Authorization},
+
+                    data: {
+                        employeeAuthoritie:updateEmployeeAuthoritie,
+                        authId:authId
+
+                    },
+                    contentType:'application/x-www-form-urlencoded', //参数类型
+                    timeout:50000,
+                    beforeSend:function(){
+                        if ($.trim(authId)==''||$.trim(updateEmployeeAuthoritie)==''
+                        ){
+                            alert('添加信息不能为空');
+                            return false;
+                        }
+                    },
+
+                    success:function (result) {
+                        if (result==true){
+                            alert('修改角色成功！');
+                            window.location.reload();
+                        }else {
+                            alert('添加失败，请检查输入信息！');
+                        }
+                    },
+
+                    error:function (xhr) {
+                        if (xhr.status=='404'){
+                            alert("请求失败，请刷新页面！");
+                        }else if (xhr.status=='403'){
+                            alert("您没有权限欧！")
+                        }else if (xhr.status=='500'){
+                            alert("账号已过期，请重新登录！");
+                            window.location.href='/client/login.html';
+                        }
+                    }
+                });
+            });
+
+        });
+
+        //通过id查找角色信息
+        function findAuthByEmployee(employeeId) {
+
+            //读取cookie
+            var Authorization=$.cookie('Authorization');
+            var username=$.cookie("username");
+            if (Authorization==null||username==null||Authorization==''||username==''){
+                window.location.href='/client/login.html';
+                return false;
+            }
+            //通过员工id查询员工职位
+            $.ajax({
+                type:'post',
+                url:'http://localhost:8080/zuul_staff/findEmployeeById?',
+                headers:{"Authorization":"Bearer "+Authorization},
+                data: {
+                    employeeId:employeeId
+                },
+                contentType:'application/x-www-form-urlencoded', //参数类型
+                timeout:50000,
+                success:function (result) { //该函数会自动把JSON解析为对象
+
+                    for (var i = 0; i < maxauth; i++) {
+                        $('#remove').remove();
+                    }
+
+                    $('#deleteEmployeeId').text(result.employeeId);
+                    //角色
+                    var auths='';
+                    var employeeAuths=result.employeeAuths;
+                    $.each(employeeAuths,function (key,value) {
+                        //alert(employeeAuths[key].employeeId+employeeAuths[key].employeeAuthoritie);
+                        auths+='<tr id="remove"><td>'+(key+1)+'</td>'+
+                            '<td>'+employeeAuths[key].employeeAuthoritie+'</td>'+
+                            '<td><button type="button" class="btn btn-sm btn-warning" onclick="deleteAuthByEmployeeId('+employeeAuths[key].authId+')">删除</button></td>' +
+                            '</tr>';
+                        maxauth=(key+1);
+                    });
+                    $('#deleteTbody').append(auths);
+                },
+                error:function (xhr) {
+                    if (xhr.status=='404'){
+                        alert("请求失败，请刷新页面！");
+                    }else if (xhr.status=='403'){
+                        alert("您没有权限欧！")
+                        window.location.href='/client/index.html';
+                    }else if (xhr.status=='500'){
+                        alert("账号已过期，请重新登录！");
+                        window.location.href='/client/login.html';
+                    }
+                }
+            });
+
+        }
+
+
+
+        //职位删除
+        function deleteAuthByEmployeeId(authId) {
+            if (!confirm("确定删除吗？")){
+                return false;
+            }
+            //读取cookie
+            var Authorization=$.cookie('Authorization');
+            var username=$.cookie("username");
+            if (Authorization==null||username==null||Authorization==''||username==''){
+                window.location.href='/client/login.html';
+                return false;
+            }
+
+            $.ajax({
+                type:'post',
+                url:'http://localhost:8080/zuul_staff/deleteEmployeeAuthByAuthId?',
+                headers:{"Authorization":"Bearer "+Authorization},
+                data: {
+                    authId:authId
+
+                },
+                contentType:'application/x-www-form-urlencoded', //参数类型
+                timeout:50000,
+                success:function (result) { //该函数会自动把JSON解析为对象
+                    if (result==true){
+                        alert('角色删除成功！');
+                    }else {
+                        alert('删除失败！');
+                    }
+                    window.location.reload();
+                },
+                error:function (xhr) {
+                    if (xhr.status=='404'){
+                        alert("请求失败，请刷新页面！");
+                    }else if (xhr.status=='403'){
+                        alert("您没有权限欧！")
+                        window.location.href='/client/index.html';
+                    }else if (xhr.status=='500'){
+                        alert("账号已过期，请重新登录！");
+                        window.location.href='/client/login.html';
+                    }
+                }
+            });
+        }
+
+    </script>
+</head>
+
+<body>
+<!--head-->
+<div id="head"></div>
+
+<div class="container-fluid " style="padding-top: 1%;background-color:#E8E8E8;padding-left: 0px;padding-right: 0px;" >
+    <div class="row" style="height: 844px;" >
+
+        <!--        左头-->
+        <div id="lefthead" class="sider col-md-2 pr-0 text-center"  style="background-color: #333333" fragment="sidebar"></div>
+
+
+
+        <div class="col-md-10">
+            <div class="container-fluid" style="background-color:#FFFFFF; padding-top: 8px;">
+
+                <button type="button" class="btn btn-sm btn-info " data-toggle="modal" data-target="#updateAuthModal" data-whatever="@mdo" style="float: right;">职位修改</button>
+                <button type="button" class="btn btn-sm btn-info " data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo" style="float: right;">职位添加</button>
+                <div class="table-responsive">
+                    <table class="table table-striped table-sm">
+                        <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>员工号</th>
+                            <th>姓名</th>
+                            <th>角色</th>
+                            <th>是否正式</th>
+                            <th>入职时间</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tbody">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <form id="deleteEmpForm"  method="post">
+            <input type="hidden" name="_method" value="delete"/>
+        </form>
+    </div>
+</div>
+
+
+
+<!--添加角色模态框组-->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-header" id="exampleModalLabel">职位添加</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">员工号:</label>
+                        <input type="text" class="form-control" id="employeeId">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="control-label">角色:</label>
+                        <select class="form-control" id="employeeAuthoritie" name="employeeAuthoritie">
+                            <option >店长</option>
+                            <option >总经理</option>
+                            <option >人事经理</option>
+                            <option >库存经理</option>
+                            <option >收银员</option>
+                            <option >库存管理员</option>
+                            <option >保洁员</option>
+                            <option >客服人员</option>
+                            <option >理货员</option>
+                            <option >推销员</option>
+                            <option >保安</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-dismiss="modal" style="width: auto;">关闭</button>
+                <button id="addauth" type="button" class="btn btn-success" style="width: auto;">添加</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--删除角色模态框组-->
+<div class="modal fade" id="deleteAuthModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-header">职位删除</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-footer mx-auto">
+                <form>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">员工号:</label>
+                        <span class="form-control" id="deleteEmployeeId">0000</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="control-label">角色:</label>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-sm">
+                                <thead>
+                                <tr>
+                                    <th>序号</th>
+                                    <th>角色</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody id="deleteTbody">
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--更新角色模态框组-->
+<div class="modal fade" id="updateAuthModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-header" id="updateModalLabel">职位修改</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">角色ID:</label>
+                        <input type="text" class="form-control" id="authId" placeholder="角色ID为角色前的数字">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="control-label">修改角色为:</label>
+                        <select class="form-control" id="updateEmployeeAuthoritie" name="employeeAuthoritie">
+                            <option >店长</option>
+                            <option >总经理</option>
+                            <option >人事经理</option>
+                            <option >库存经理</option>
+                            <option >收银员</option>
+                            <option >库存管理员</option>
+                            <option >保洁员</option>
+                            <option >客服人员</option>
+                            <option >理货员</option>
+                            <option >推销员</option>
+                            <option >保安</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-dismiss="modal" style="width: auto;">关闭</button>
+                <button id="upppdateAuth" type="button" class="btn btn-success" style="width: auto;">修改</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+
+</html>

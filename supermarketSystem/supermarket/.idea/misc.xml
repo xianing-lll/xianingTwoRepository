@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$/../sms-html" />
+    <file type="web" url="file://$PROJECT_DIR$/sms_html" />
+  </component>
+  <component name="JavaScriptSettings">
+    <option name="languageLevel" value="ES6" />
+  </component>
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/sms_server_auth2/pom.xml" />
+        <option value="$PROJECT_DIR$/sms_server_cash_register/pom.xml" />
+        <option value="$PROJECT_DIR$/sms_server_eureka/pom.xml" />
+        <option value="$PROJECT_DIR$/sms_server_staff/pom.xml" />
+        <option value="$PROJECT_DIR$/sms_server_trade/pom.xml" />
+        <option value="$PROJECT_DIR$/sms_server_zuul/pom.xml" />
+        <option value="$PROJECT_DIR$/sms_html_client/pom.xml" />
+        <option value="$PROJECT_DIR$/sms_html/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="false" project-jdk-name="11" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
+</project>

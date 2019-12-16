@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)http://getbootstrap.com/docs/4.0/examples/dashboard/ -->
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>商品预警</title>
+    <script src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+    <link href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+    <link href="/assert/css/sider.css" rel="stylesheet">
+    <style type="text/css">
+        /* Chart.js */
+
+        @-webkit-keyframes chartjs-render-animation {
+            from {
+                opacity: 0.99
+            }
+            to {
+                opacity: 1
+            }
+        }
+
+        @keyframes chartjs-render-animation {
+            from {
+                opacity: 0.99
+            }
+            to {
+                opacity: 1
+            }
+        }
+
+        .chartjs-render-monitor {
+            -webkit-animation: chartjs-render-animation 0.001s;
+            animation: chartjs-render-animation 0.001s;
+        }
+    </style>
+    <script>
+
+
+
+        $(document).ready(function () {
+            //加载头部和左部
+            $('#head').load("/client/head.html");
+            $('#lefthead').load('/client/lefthead.html');
+//读取cookie
+            var Authorization=$.cookie('Authorization');
+            var username=$.cookie("username");
+            if (Authorization==null||username==null||Authorization==''||username==''){
+                window.location.href='/client/login.html';
+                return false;
+            }
+            //最大商品数
+            var maxcount=0;
+
+
+
+
+
+            //默认加载一过期商品
+            $.ajax({
+                type:'post',
+                url:'http://localhost:8080/zuul_trade/findOverdueTradeByLevel?',
+                headers:{"Authorization":"Bearer "+Authorization},
+                data: {
+                    Level:'过期商品'
+                },
+                contentType:'application/x-www-form-urlencoded', //参数类型
+                timeout:50000,
+                success:function (result) { //该函数会自动把JSON解析为对象
+
+                    $.each(result,function (key,value) {
+                        //整体
+                        var html='';
+                        html+='<tr id="remove"><td>'+(key+1)+'</td>'+
+                            '<td>'+result[key].tradeMember+'</td>'+
+                            '<td>'+result[key].tradeName+'</td>'+
+                            '<td>'+result[key].tradeCategory+'</td>'+
+                            '<td>'+result[key].purhasePrice+'</td>'+
+                            '<td>'+result[key].price+'</td>'+
+                            '<td>'+result[key].tradeStock+'</td>'+
+                            '<td>'+result[key].manufactureDate+'</td>'+
+                            '<td>'+result[key].qualityGuaranteePeriod+'</td>'+
+                            '<td>'+result[key].remainingDays+'</td>'+
+                            '<td>'+result[key].expirationTime+'</td>'+
+                            '<td>'+result[key].whileMember+'</td>'+
+                            '<td>'+result[key].purchaseId+'</td>'+
+                            '<td><button onclick="shouUpdateView('+result[key].tradeMember+')" class="btn btn-sm btn-primary deleteBtn" data-toggle="modal" data-target="#shouUpdateView" data-whatever="@mdo">商品出库</button></td>'+
+                            '</tr>';
+                        //
+                        $('#tbody').append(html);
+                        maxcount=(key+1);
+                    });
+
+                },
+                error:function (xhr) {
+                    if (xhr.status=='404'){
+                        alert("请求失败，请刷新页面！");
+                    }else if (xhr.status=='403'){
+                        alert("您没有权限欧！")
+                        window.location.href='/client/index.html';
+                    }else if (xhr.status=='500'){
+                        alert("您没有权限欧！");
+                        window.location.href='/client/index.html';
+                    }
+                }
+            });
+
+
+            //通过预警级数查找商品
+            $('#findtrade').click(function () {
+                var Level=$('#Level').val();
+                $.ajax({
+                    url:'http://localhost:8080/zuul_trade/findOverdueTradeByLevel?',
+                    type:'POST',
+                    data:{
+                        Level:Level
+                    },
+                    contentType:'application/x-www-form-urlencoded', //参数类型
+                    timeout:50000,
+                    headers:{"Authorization":"Bearer "+Authorization},
+                    beforeSend:function(){
+
+                    },
+                    success:function (result) {
+
+                        for (var i = 0; i < maxcount; i++) {
+                            $('#remove').remove();
+                        }
+                        $.each(result,function (key,value) {
+                            //整体
+                            var html='';
+                            html+='<tr id="remove"><td>'+(key+1)+'</td>'+
+                                '<td>'+result[key].tradeMember+'</td>'+
+                                '<td>'+result[key].tradeName+'</td>'+
+                                '<td>'+result[key].tradeCategory+'</td>'+
+                                '<td>'+result[key].purhasePrice+'</td>'+
+                                '<td>'+result[key].price+'</td>'+
+                                '<td>'+result[key].tradeStock+'</td>'+
+                                '<td>'+result[key].manufactureDate+'</td>'+
+                                '<td>'+result[key].qualityGuaranteePeriod+'</td>'+
+                                '<td>'+result[key].remainingDays+'</td>'+
+                                '<td>'+result[key].expirationTime+'</td>'+
+                                '<td>'+result[key].whileMember+'</td>'+
+                                '<td>'+result[key].purchaseId+'</td>'+
+                                '<td><button onclick="shouUpdateView('+result[key].tradeMember+')" class="btn btn-sm btn-primary deleteBtn" data-toggle="modal" data-target="#shouUpdateView" data-whatever="@mdo">商品出库</button></td>'+
+                                '</tr>';
+                            //
+                            $('#tbody').append(html);
+                            maxcount=(key+1);
+                        });
+                    },
+                    error:function (xhr) {
+                        if (xhr.status=='404'){
+                            alert("请求失败，请刷新页面！");
+                        }else if (xhr.status=='403'||xhr.status=='401'){
+                            alert("您没有权限欧！")
+                        }else if (xhr.status=='500'){
+                            alert("服务器执行错误，请稍后再试！");
+                        }
+                    }
+                });
+            });
+
+            //更新商品库存数量
+            $('#updateTrade').click(function () {
+                var tradeMember=$('#tradeMember').text();
+                var outTradeStock=$('#outTradeStock').val();
+
+                $.ajax({
+                    url:'http://localhost:8080/zuul_trade/updateTradeStockByTradeMember?',
+                    type:'POST',
+                    data:{
+                        tradeMember:tradeMember,
+                        outTradeStock:outTradeStock
+                    },
+                    contentType:'application/x-www-form-urlencoded', //参数类型
+                    timeout:50000,
+                    headers:{"Authorization":"Bearer "+Authorization},
+                    beforeSend:function(){
+                        if ($.trim(outTradeStock)==''){
+                            alert("商品出库数量不能为空！");
+                            return false;
+                        }
+                    },
+                    success:function (result) {
+                        if (result==true){
+                            alert("商品出库成功！");
+                            window.location.reload();
+                        }
+                    },
+                    error:function (xhr) {
+                        if (xhr.status=='404'){
+                            alert("请求失败，请刷新页面！");
+                        }else if (xhr.status=='403'||xhr.status=='401'){
+                            alert("您没有权限欧！")
+                        }else if (xhr.status=='500'){
+                            alert("账号已过期，请重新登录！");
+                            window.location.href='/client/login.html';
+                        }
+                    }
+                });
+            });
+
+
+        });
+
+
+        //展示商品出库界面
+        function shouUpdateView(tradeMember) {
+            $('#tradeMember').text(tradeMember);
+        }
+    </script>
+</head>
+
+<body>
+<!--head-->
+<div id="head"></div>
+
+<div class="container-fluid " style="padding-top: 1%;background-color:#E8E8E8;padding-left: 0px;padding-right: 0px;" >
+    <div class="row" style="height: 844px;" >
+
+        <!--        左头-->
+        <div id="lefthead" class="sider col-md-2 pr-0 text-center"  style="background-color: #333333" fragment="sidebar"></div>
+
+
+
+        <div class="col-md-10">
+            <div class="container-fluid" style="background-color:#FFFFFF; padding-top: 8px;">
+
+                <div class="input-group row" >
+
+                    <div class="col-md-5"></div>
+                    <div class="col-md-5 input-group">
+
+                        <select class="form-control" id="Level" name="employeeAuthoritie">
+                            <option >过期商品</option>
+                            <option >二级预警</option>
+                            <option >一级预警</option>
+                        </select>
+                        <span class="input-group-btn">
+                             <button id="findtrade" class="btn btn-success " type="button" >查找</button>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-sm">
+                        <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>商品编号</th>
+                            <th>名称</th>
+                            <th>种类</th>
+                            <th>进价(元)</th>
+                            <th>售价(元)</th>
+                            <th>数量</th>
+                            <th>生产日期</th>
+                            <th>保质期(天)</th>
+                            <th>剩余天数</th>
+                            <th>过期时间</th>
+                            <th>是否会员</th>
+                            <th>进货批次</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tbody">
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--商品出库模态框组-->
+<div class="modal fade" id="shouUpdateView" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-header" >商品出库(商品数为零会自动删除)</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">商品ID:</label>
+                        <span id="tradeMember"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">出库数量:</label>
+                        <input type="text" class="form-control" id="outTradeStock">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-dismiss="modal" style="width: auto;">关闭</button>
+                <button id="updateTrade" type="button" class="btn btn-success" style="width: auto;">出库</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+
+
+</html>

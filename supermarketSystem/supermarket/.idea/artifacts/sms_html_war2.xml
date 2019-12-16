@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="sms_html:war">
+    <output-path>$PROJECT_DIR$/sms_html/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>sms_html</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="sms_html.war">
+      <element id="artifact" artifact-name="sms_html:war exploded" />
+    </root>
+  </artifact>
+</component>

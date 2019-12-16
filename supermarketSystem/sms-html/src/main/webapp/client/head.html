@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>XN超市系统头页</title>
+    <script src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+    <link href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+    <link href="/assert/css/sider.css"  rel="stylesheet">
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+//读取cookie
+            var Authorization=$.cookie('Authorization');
+            var username=$.cookie("username");
+            if (Authorization==null||username==null||Authorization==''||username==''){
+                window.location.href='/client/login.html';
+                return false;
+            }
+            //查找用户名
+            $.ajax({
+
+                url:'http://localhost:8080/zuul_staff/findEmployeeById?',
+                type:'post',
+                data:{
+                    employeeId:username
+                },
+                contentType:'application/x-www-form-urlencoded', //参数类型
+                timeout:50000,
+                headers:{"Authorization":"Bearer "+Authorization},
+                beforeSend:function(){
+                },
+                success:function (result) {
+                    $('#emplayeeId').text(result.employeeId);
+                    $('#emplayeeName').text(result.employeeName);
+                    var auths='';
+                    var employeeAuths=result.employeeAuths;
+                    $.each(employeeAuths,function (key,value) {
+                        auths+=employeeAuths[key].employeeAuthoritie+' ';
+                    });
+                    $('#EmployeeAuth').text(auths);
+                },
+
+                error:function (xhr) {
+                    if (xhr.status=='404'){
+                        alert("请求失败，请刷新页面！");
+                    }else if (xhr.status=='403'||xhr.status=='401'){
+                        alert("您没有权限欧！")
+                    }else if (xhr.status=='500'){
+                        alert("服务器执行错误，请稍后再试！");
+                    }
+                }
+            });
+        });
+
+        $('#logout').click(function () {
+            if (confirm("是否退出？")){
+                var b1=$.removeCookie('Authorization', { path: '/' });
+                var b2=$.removeCookie('username', { path: '/' });
+                if (b1==true&&b2==true){
+                    window.location.href='/client/login.html';
+                }else {
+                    alert('退出失败!');
+                }
+            }
+        });
+
+    </script>
+</head>
+
+<body>
+
+<div  class="container-fluid"  style="background-color:white;padding-top: 6px;padding-left: 20px;" fragment="topbar">
+    <div class="row">
+        <div class="col-md-10">
+            <img src="/assert/img/user.png" style="width: 37px;height: 37px;">
+            <span class="topfont" >员工号:<span id="emplayeeId"></span></span>&nbsp;
+            <span class="topfont">姓名:<span id="emplayeeName"></span></span>&nbsp;&nbsp;&nbsp;
+            <span class="topfont">职位:<span id="EmployeeAuth"></span></span>
+        </div>
+
+
+        <div class="col-md-2 mx-auto">
+            <a href="index.html"><button class="btn btn-info" >首页</button></a>
+            <button id="logout" class="btn btn-danger"> 注销</button>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+
+

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="sms_server_gateway" />
+        <module name="sms_server_trade" />
+        <module name="sms_server_staff" />
+        <module name="sms_server_cash_register" />
+        <module name="sms-html" />
+        <module name="sms_server_eureka" />
+        <module name="sms_server_auth2" />
+        <module name="sms_html_client" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel target="11">
+      <module name="sms-html" target="1.7" />
+      <module name="sms_html" target="1.7" />
+      <module name="sms_html_client" target="1.8" />
+      <module name="sms_server_auth2" target="1.8" />
+      <module name="sms_server_cash_register" target="1.8" />
+      <module name="sms_server_eureka" target="1.8" />
+      <module name="sms_server_gateway" target="1.8" />
+      <module name="sms_server_staff" target="1.8" />
+      <module name="sms_server_trade" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="sms_html_client" options="-parameters" />
+      <module name="sms_server_auth2" options="-parameters" />
+      <module name="sms_server_cash_register" options="-parameters" />
+      <module name="sms_server_eureka" options="-parameters" />
+      <module name="sms_server_gateway" options="-parameters" />
+      <module name="sms_server_staff" options="-parameters" />
+      <module name="sms_server_trade" options="-parameters" />
+    </option>
+  </component>
+</project>

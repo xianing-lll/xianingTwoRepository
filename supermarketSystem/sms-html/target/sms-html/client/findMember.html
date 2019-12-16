@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)http://getbootstrap.com/docs/4.0/examples/dashboard/ -->
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>会员管理</title>
+    <script src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+    <link href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+    <link href="/assert/css/sider.css" rel="stylesheet">
+    <style type="text/css">
+        /* Chart.js */
+
+        @-webkit-keyframes chartjs-render-animation {
+            from {
+                opacity: 0.99
+            }
+            to {
+                opacity: 1
+            }
+        }
+
+        @keyframes chartjs-render-animation {
+            from {
+                opacity: 0.99
+            }
+            to {
+                opacity: 1
+            }
+        }
+
+        .chartjs-render-monitor {
+            -webkit-animation: chartjs-render-animation 0.001s;
+            animation: chartjs-render-animation 0.001s;
+        }
+    </style>
+    <script>
+
+
+
+        $(document).ready(function () {
+            //加载头部和左部
+            $('#head').load("/client/head.html");
+            $('#lefthead').load('/client/lefthead.html');
+//读取cookie
+            var Authorization=$.cookie('Authorization');
+            var username=$.cookie("username");
+            if (Authorization==null||username==null||Authorization==''||username==''){
+                window.location.href='/client/login.html';
+                return false;
+            }
+
+
+
+
+            //加载会员信息
+            $.ajax({
+                type:'post',
+                url:'http://localhost:8080/zuul_cash/findAllMember?',
+                headers:{"Authorization":"Bearer "+Authorization},
+                data: {
+                },
+                contentType:'application/x-www-form-urlencoded', //参数类型
+                timeout:50000,
+                success:function (result) { //该函数会自动把JSON解析为对象
+
+                    $.each(result,function (key,value) {
+                        //整体
+                        var html='';
+                        html+='<tr id="remove"><td>'+(key+1)+'</td>'+
+                            '<td>'+result[key].membershipId+'</td>'+
+                            '<td>'+result[key].membershipName+'</td>'+
+                            '<td>'+result[key].membershipPhone+'</td>'+
+                            '<td>'+result[key].membershipLevel+'</td>'+
+                            '<td>'+result[key].membershipScore+'</td>'+
+                            '<td>'+result[key].membershipBalance+'</td>'+
+                            '<td><button onclick="shouMember('+result[key].membershipId+')" class="btn btn-sm btn-danger deleteBtn" data-toggle="modal" data-target="#shouMemberinfo">电话更换</button></td>'+
+                            '<td><button onclick="shoulevelupview('+result[key].membershipId+')" class="btn btn-sm btn-primary deleteBtn" data-toggle="modal" data-target="#shouMemberLevel" >升级</button></td>'+
+                            '<td><button onclick="shouMembershipScoreview('+result[key].membershipId+')" class="btn btn-sm btn-primary deleteBtn" data-toggle="modal" data-target="#shouMembershipScoreinfo" >积分扣除</button></td>'+
+                            '</tr>';
+                        //
+                        $('#tbody').append(html);
+                    });
+
+                },
+                error:function (xhr) {
+                    if (xhr.status=='404'){
+                        alert("请求失败，请刷新页面！");
+                    }else if (xhr.status=='403'){
+                        alert("您没有权限欧！")
+                        window.location.href='/client/index.html';
+                    }else if (xhr.status=='500'){
+                        alert("您没有权限欧！");
+                        window.location.href='/client/index.html';
+                    }
+                }
+            });
+
+
+
+            //会员升级
+            $('#Levelup').click(function () {
+                var membershipId=$('#membershipId').text();
+                var membershipLevel=$('#membershipLevel').val();
+                var membershipBalance=$('#membershipBalance').val();
+                if ($.trim(membershipId)==''||$.trim(membershipLevel)==''||$.trim(membershipBalance)==''
+                ){
+                    alert('输入信息不能为空！');
+                    return false;
+                }
+                $.ajax({
+                    url:'http://localhost:8080/zuul_cash/updateMembershipLevelByMembershipId?',
+                    type:'POST',
+                    data:{
+                        membershipId:membershipId,
+                        membershipLevel:membershipLevel,
+                        membershipBalance:membershipBalance
+                    },
+                    contentType:'application/x-www-form-urlencoded', //参数类型
+                    timeout:50000,
+                    headers:{"Authorization":"Bearer "+Authorization},
+                    beforeSend:function(){
+                        if (!confirm("是否确认？")){
+                            return false;
+                        }
+                    },
+                    success:function (result) {
+                        if (result==true){
+                            alert(membershipId+'已成功升级为'+membershipLevel+'!');
+                            window.location.reload();
+                        }
+                    },
+                    error:function (xhr) {
+                        if (xhr.status=='404'){
+                            alert("请求失败，请刷新页面！");
+                        }else if (xhr.status=='403'||xhr.status=='401'){
+                            alert("您没有权限欧！")
+                        }else if (xhr.status=='500'){
+                            alert("账号已过期，请重新登录！");
+                            window.location.href='/client/login.html';
+                        }
+                    }
+                });
+            });
+
+            //会员电话号更换
+            $('#updateMemberPhone').click(function () {
+                var membershipId=$('#updateMembershipId').text();
+                var membershipPhone=$('#updateMembershipPhone').val();
+                if ($.trim(membershipId)==''||$.trim(membershipPhone)==''
+                ){
+                    alert('输入信息不能为空！');
+                    return false;
+                }
+                $.ajax({
+                    url:'http://localhost:8080/zuul_cash/updateMembershipPhoneByMembershipId?',
+                    type:'POST',
+                    data:{
+                        membershipId:membershipId,
+                        membershipPhone:membershipPhone
+                    },
+                    contentType:'application/x-www-form-urlencoded', //参数类型
+                    timeout:50000,
+                    headers:{"Authorization":"Bearer "+Authorization},
+                    beforeSend:function(){
+                        if (!confirm("是否确认？")){
+                            return false;
+                        }
+                    },
+                    success:function (result) {
+                        if (result==true){
+                            alert('会员电话号已成功更换为'+membershipPhone+'!');
+                            window.location.reload();
+                        }
+                    },
+                    error:function (xhr) {
+                        if (xhr.status=='404'){
+                            alert("请求失败，请刷新页面！");
+                        }else if (xhr.status=='403'||xhr.status=='401'){
+                            alert("您没有权限欧！")
+                        }else if (xhr.status=='500'){
+                            alert("账号已过期，请重新登录！");
+                            window.location.href='/client/login.html';
+                        }
+                    }
+                });
+            });
+
+            //会员积分扣除
+            $('#membershipScoreDecrease').click(function () {
+                var membershipId=$('#scoreMembershipId').text();
+                var membershipScore=$('#scoreMembershipScore').val();
+                if ($.trim(membershipId)==''||$.trim(membershipScore)==''
+                ){
+                    alert('输入信息不能为空！');
+                    return false;
+                }
+                $.ajax({
+                    url:'http://localhost:8080/zuul_cash/updatEmembershipScore?',
+                    type:'POST',
+                    data:{
+                        membershipId:membershipId,
+                        membershipScore:membershipScore
+                    },
+                    contentType:'application/x-www-form-urlencoded', //参数类型
+                    timeout:50000,
+                    headers:{"Authorization":"Bearer "+Authorization},
+                    beforeSend:function(){
+                        if (!confirm("是否确认积分扣除正确？")){
+                            return false;
+                        }
+                    },
+                    success:function (result) {
+                        if (result==true){
+                            alert('会员'+membershipId+'积分已成功扣除'+membershipScore+'分!');
+                            window.location.reload();
+                        }
+                    },
+                    error:function (xhr) {
+                        if (xhr.status=='404'){
+                            alert("请求失败，请刷新页面！");
+                        }else if (xhr.status=='403'||xhr.status=='401'){
+                            alert("您没有权限欧！")
+                        }else if (xhr.status=='500'){
+                            alert("账号已过期，请重新登录！");
+                            window.location.href='/client/login.html';
+                        }
+                    }
+                });
+            });
+        });
+
+        //展示会员升级界面数据
+        function shoulevelupview(membershipId) {
+            $('#membershipId').text(membershipId);
+        }
+
+
+        //电话更换界面ID展示
+        function shouMember(membershipId) {
+            $('#updateMembershipId').text(membershipId);
+        }
+
+        //展示积分扣除界面
+        function shouMembershipScoreview(membershipId) {
+            $('#scoreMembershipId').text(membershipId);
+        }
+    </script>
+</head>
+
+<body>
+<!--head-->
+<div id="head"></div>
+
+<div class="container-fluid " style="padding-top: 1%;background-color:#E8E8E8;padding-left: 0px;padding-right: 0px;" >
+    <div class="row" style="height: 844px;" >
+
+        <!--        左头-->
+        <div id="lefthead" class="sider col-md-2 pr-0 text-center"  style="background-color: #333333" fragment="sidebar"></div>
+
+
+
+        <div class="col-md-10">
+            <div class="container-fluid" style="background-color:#FFFFFF; padding-top: 8px;">
+
+                <div class="input-group row" >
+
+                    <div class="col-md-10"></div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-sm">
+                        <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>会员ID</th>
+                            <th>姓名</th>
+                            <th>手机号</th>
+                            <th>等级</th>
+                            <th>积分</th>
+                            <th>余额</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tbody">
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--减少会员积分界面-->
+<div class="modal fade" id="shouMembershipScoreinfo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-header" >会员电话更换</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">会员ID:</label>
+                        <span id="scoreMembershipId"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">扣除积分:</label>
+                        <input type="text" class="form-control" id="scoreMembershipScore">
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-dismiss="modal" style="width: auto;">关闭</button>
+                <button id="membershipScoreDecrease" type="button" class="btn btn-success" style="width: auto;">扣除</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!--会员电话更换-->
+<div class="modal fade" id="shouMemberinfo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-header" >会员电话更换</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">会员ID:</label>
+                        <span id="updateMembershipId"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">新电话号:</label>
+                        <input type="text" class="form-control" id="updateMembershipPhone">
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-dismiss="modal" style="width: auto;">关闭</button>
+                <button id="updateMemberPhone" type="button" class="btn btn-success" style="width: auto;">更换</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--升级会员模态框组-->
+<div class="modal fade" id="shouMemberLevel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-header" id="exampleModalLabel">会员升级</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">会员ID:</label>
+                        <span id="membershipId"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">等级升级为:</label>
+                        <select class="form-control" id="membershipLevel" name="employeeAuthoritie">
+                            <option >普通会员</option>
+                            <option >白银会员</option>
+                            <option >黄金会员</option>
+                            <option >钻石会员</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">充值金额:</label>
+                        <input type="text" class="form-control" id="membershipBalance">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-dismiss="modal" style="width: auto;">关闭</button>
+                <button id="Levelup" type="button" class="btn btn-success" style="width: auto;">升级</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+
+</html>

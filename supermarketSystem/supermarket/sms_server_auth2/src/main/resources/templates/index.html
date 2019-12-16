@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)http://getbootstrap.com/docs/4.0/examples/dashboard/ -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="description" content="">
+		<meta name="author" content="">
+		<title>Dashboard Template for Bootstrap</title>
+<!--		<script src="/webjars/jquery/3.1.1/jquery.min.js"></script>-->
+<!--		<link href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">-->
+<!--		<script src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+		<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+		<script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+		<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+		<script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+		<link href="assert/css/sider.css" th:href="@{assert/css/sider.css}" rel="stylesheet">
+		<script type="text/javascript">
+			// $(document).ready(function () {
+			// 	$("#findEmployeeInformationByEmployeeRegular").click(function () {
+			// 		var name=$.cookie('Authorization');
+			// 		alert(name);
+			// 		$.ajax({
+			// 			type:'get',
+			// 			url:'http://xianing:8080/zuul_staff/findEmployeeInformationByEmployeeRegular',
+			// 			headers:{
+			// 				'Authorization':'bearer '+name
+			// 			},
+			// 			success:function () {
+			// 				window.location.href='http://xianing:8080/zuul_staff/comment/findEmployeeInformationByEmployeeRegular';
+			// 			}
+			// 		});
+			// 	});
+			// 	$("#hello").click(function () {
+			// 		var name=$.cookie('Authorization');
+			// 		alert(name);
+			// 		var xhr=new XMLHttpRequest();
+			// 		xhr.open('get','http://xianing:8080/zuul_staff/findEmployeeById?employeeId=1003');
+			// 		xhr.send();
+			// 	});
+			// });
+
+		</script>
+
+	</head>
+
+	<body>
+
+
+
+<!--		&lt;!&ndash;引入topbar&ndash;&gt;-->
+<!--		<div th:replace="commons/bar::topbar"></div>-->
+	<div  class="container-fluid"  style="padding-top: 6px;padding-left: 20px;" th:fragment="topbar">
+		<div class="row">
+			<div class="col-md-6">
+				<img th:src="@{/assert/img/user.png}" style="width: 37px;height: 37px;">
+				<span class="text-info" >员工号:<span th:text="${employee.getEmployeeId()}"></span></span>&nbsp;
+				<span class="topfont">姓名:<span th:text="${employee.getEmployeeName()}"></span></span>&nbsp;&nbsp;&nbsp;
+				<span class="topfont">职位:<span th:each="auths:${employee.getEmployeeAuths()}"><span th:text="${auths.getEmployeeAuthoritie()}"></span></span></span>
+			</div>
+
+			<div class="col-md-3">
+				<div style="padding-top: 4px;">
+					<img th:src="@{/assert/img/qq.png}">
+					<button id="hello" class="btn btn-info">意见与反馈</button>
+
+					<span class="gryfont"></span>
+				</div>
+
+			</div>
+			<div class="col-md-3">
+				<button class="btn btn-info" >订单管理</button>
+				<button class="btn btn-warning">优惠活动</button>
+				<a href="/zuul_auth/logout"><button class="btn btn-danger"> 注销</button></a>
+
+			</div>
+		</div>
+	</div>
+
+
+	<div class="container-fluid" style="padding-top: 1%;background-color:#E8E8E8;padding-left: 0px;padding-right: 0px;" >
+			<div class="row" style="height: 844px;" >
+				<!--引入sidebar-->
+<!--				<div th:replace="commons/bar::sidebar"></div>-->
+				<!--sidebar-->
+
+				<div class="sider col-md-2 text-center"   th:fragment="sidebar">
+
+					<div class="container-fluid" style="padding-right: 0px;padding-left: 0px">
+						<div id="accordion">
+							<div class="card">
+								<div class="card-header">
+									<a class="card-link card-link" data-toggle="collapse" href="#collapseOne">
+										前台收银
+									</a>
+								</div>
+								<div id="collapseOne" class="collapse show" data-parent="#accordion">
+									<div class="card-body" style="padding: 0px;">
+										<a href="#" th:href="@{/main}">
+											<div style="width:100%;height:40px;padding-top: 5px;text-align: center"><span class="sidersfont" style="color: #1b1e21">收银</span></div>
+										</a>
+										<a href="#" th:href="@{/main}">
+											<div style="width:100%;height:40px;padding-top: 5px;text-align: center"><span class="sidersfont" style="color: #1b1e21">注册会员</span></div>
+										</a>
+										<a href="#" th:href="@{/main}">
+											<div style="width:100%;height:40px;padding-top: 5px;text-align: center"><span class="sidersfont" style="color: #1b1e21">会员管理</span></div>
+										</a>
+									</div>
+								</div>
+							</div>
+
+
+
+
+							<div class="card">
+								<div class="card-header">
+									<a class="collapsed card-link" data-toggle="collapse" href="#collapseTwo">
+										库存管理
+									</a>
+								</div>
+								<div id="collapseTwo" class="collapse" data-parent="#accordion">
+									<div class="card-body" style="padding: 0px;">
+										<a href="#" th:href="@{/main}">
+											<div style="width:100%;height:40px;padding-top: 5px;text-align: center"><span class="sidersfont" style="color: #1b1e21">添加商品</span></div>
+										</a>
+										<a href="#" th:href="@{/main}">
+											<div style="width:100%;height:40px;padding-top: 5px;text-align: center"><span class="sidersfont" style="color: #1b1e21">商品预警</span></div>
+										</a>
+										<a href="#" th:href="@{/main}">
+											<div style="width:100%;height:40px;padding-top: 5px;text-align: center"><span class="sidersfont" style="color: #1b1e21">会员标注</span></div>
+										</a>
+										<a href="#" th:href="@{/main}">
+											<div style="width:100%;height:40px;padding-top: 5px;text-align: center"><span class="sidersfont" style="color: #1b1e21">供货商</span></div>
+										</a>
+										<a href="#" th:href="@{/main}">
+											<div style="width:100%;height:40px;padding-top: 5px;text-align: center"><span class="sidersfont" style="color: #1b1e21">销售月榜</span></div>
+										</a>
+									</div>
+								</div>
+							</div>
+							<div class="card">
+								<div class="card-header">
+									<a class="collapsed card-link" data-toggle="collapse" href="#collapseThree">
+										员工管理
+									</a>
+								</div>
+								<div id="collapseThree" class="collapse" data-parent="#accordion">
+									<div class="card-body" style="padding: 0px;">
+										<a>
+											<div style="width:100%;height:40px;padding-top: 5px;text-align: center"><span class="sidersfont" style="color: #1b1e21">员工注册</span></div>
+										</a>
+										<a href="/zuul_staff/comment/findEmployeeInformationByEmployeeRegular">
+											<div style="width:100%;height:40px;padding-top: 5px;text-align: center"><span class="sidersfont" style="color: #1b1e21">注册审批</span></div>
+										</a>
+										<a href="#" th:href="@{/main}">
+											<div style="width:100%;height:40px;padding-top: 5px;text-align: center"><span class="sidersfont" style="color: #1b1e21">职位调整</span></div>
+										</a>
+										<a href="#" th:href="@{/main}">
+											<div style="width:100%;height:40px;padding-top: 5px;text-align: center"><span class="sidersfont" style="color: #1b1e21">工资查询</span></div>
+										</a>
+										<a href="#" th:href="@{/main}">
+											<div style="width:100%;height:40px;padding-top: 5px;text-align: center"><span class="sidersfont" style="color: #1b1e21">请假处理</span></div>
+										</a>
+										<a href="#" th:href="@{/main}">
+											<div style="width:100%;height:40px;padding-top: 5px;text-align: center"><span class="sidersfont" style="color: #1b1e21">离职处理</span></div>
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--这是首页大界面栏-->
+				<div class="col-md-9"  >
+
+					<div class="container-fluid" style="background-color:#FFFFFF; padding-top: 8px;">
+						<span class="rightheadfont">今日销售</span>
+						<hr/>
+						<div class="row">
+							<div class="col-md-4 column" style="background-color: #FF6666">
+								<h2>
+									销售额
+								</h2>
+								<p>
+									<span>0.00</span>
+									<hr/>
+									<span>折扣:0.00</span><br/>
+									<span>抹零:0.00</span>
+								</p>
+								<p>
+									<a class="btn btn-group" href="#">详情</a>
+								</p>
+							</div>
+							<div class="col-md-4 column" style="background-color: #33FF66;">
+								<h2>
+									销售单
+								</h2>
+								<p>
+									<span>0.00</span>
+									<hr/>
+									<span>汇总:0.00</span><br/>
+									<span>拆分:0.00</span>
+								</p>
+								<p>
+									<a class="btn btn-group" href="#">详情</a>
+								</p>
+							</div>
+							<div class="col-md-4 column" style="background-color: #FFFF99">
+								<h2>
+									会员详情
+								</h2>
+								<p>
+									<span>0.00</span>
+									<hr/>
+									<span>人数:0</span><br/>
+									<span>等级:0</span>
+								</p>
+								<p>
+									<a class="btn btn-group" href="#">详情</a>
+								</p>
+							</div>
+						</div>
+					</div>
+					<br/>
+					<div class="container-fluid" style="background-color:#FFFFFF;padding-top: 8px;">
+						<span class="rightheadfont">今日收入</span>
+						<hr/>
+						<div class="row">
+							<div class="col-md-5" style="border-right: 1px #E8E8E8">
+								<h2>收入</h2>
+								<span style="font-size: larger;color: #bd2130">0.00</span><br/>
+								<span>收入=销售额+充值数值+抹零金额-退款金额-储蓄卡-积分</span>
+							</div>
+							<div class="col-md-3">
+								<span class="gryfont">现金</span><br/>
+								<span>0.00</span><br/>
+								<span class="gryfont">储蓄卡</span><br/>
+								<span>0.00</span>
+							</div>
+							<div class="col-md-3">
+								<span class="gryfont">思迅play</span><br/>
+								<span>0.00</span><br/>
+								<span class="gryfont">银行卡</span><br/>
+								<span>0.00</span>
+							</div>
+							<div class="col-md-1">
+								<span class="gryfont">支付宝</span><br/>
+								<span>0.00</span><br/>
+								<span class="gryfont">积分</span><br/>
+								<span>0.00</span>
+							</div>
+						</div>
+
+					</div>
+					<br/>
+					<div class="container-fluid" style="background-color:#FFFFFF;padding-top: 8px;">
+						<span class="rightheadfont">其他数据请求</span>
+						<input type="text" class="form-control-sm" style="margin-left: 10px;">
+						<button class="btn btn-success" style="margin-left: 10px;">搜索</button>
+						<hr/>
+						<div class="row" style="height: 150px;">
+							<div class="col-md-12">
+								<span class="gryfont">暂无数据</span>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+	</body>
+
+</html>

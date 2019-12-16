@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <script src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <link href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+<div class="container">
+    <div class="row ">
+<div class="mx-auto col-md-4  text-center" style=" margin-top: 100px;">
+
+            <img class="mb-4"  src="/assert/img/bootstrap-solid.svg" alt="" width="72" height="72">
+<!--            <h1 class="h3 mb-3 font-weight-normal" >登录</h1>-->
+            <!--判断-->
+            <label class="sr-only" >Username</label>
+            <input type="text" style="margin-top: 20px;" name="username" id="username" class="form-control" placeholder="Username"  required="" autofocus="">
+            <label class="sr-only">Password</label>
+            <input type="password" name="password" class="form-control" id="password" placeholder="Password"  required="">
+
+<!--            <div class="checkbox mb-3">-->
+<!--                <label>-->
+<!--                    <input type="checkbox" value="remember-me"/> [[#{login.remember}]]-->
+<!--                </label>-->
+<!--            </div>-->
+            <button  class="btn btn-lg btn-primary btn-block" type="button" id="submituser" style="margin-top: 10px;">登录</button>
+    <script>
+
+        $("#submituser").click(function () {
+            var username=$("#username").val();
+            var password=$("#password").val();
+
+            $.ajax({
+                type:'post',
+                url:'http://localhost:8080/zuul_auth/oauth/token?',
+                headers:{
+
+                },
+
+                data:{
+                    client_id:'c1',
+                    client_secret:'123456',
+                    grant_type:'password',
+                    username:username,
+                    password:password
+                },
+                contentType:'application/x-www-form-urlencoded', //参数类型
+                timeout:50000,
+                beforeSend:function(){
+                    if ($.trim(username)==''||$.trim(password)==''){
+                        alert("账号或密码不能为空！");
+                        return false;
+                    }
+                },
+
+
+                // complete:function (response) { //在还没返回数据前执行
+                //     alert(response);
+                // },
+                success:function (result) {
+                    //console.log(result.access_token);
+
+                    var date = new Date();
+                    date.setTime(date.getTime()+61200*1000);//设置cookie为17个小时
+                    $.cookie('Authorization', result.access_token,{ expires: date, path: '/' });
+                    $.cookie('username', username,{ expires: date, path: '/' });
+                    //alert("cookie插入成功！")
+                    window.location.href='/client/index.html';
+                },
+
+                error:function (xhr) {
+                    if (xhr.status=='404'){
+                        alert("请求失败，请刷新页面！");
+                    }else if (xhr.status=='403'){
+                        alert("您没有权限欧！")
+                    }else if (xhr.status=='500'||xhr.status=='400'||xhr.status=='401'){
+                        alert("账号或密码错误！");
+                    }
+                }
+            });
+        });
+    </script>
+
+</div>
+    </div>
+</div>
+</body>
+</html>

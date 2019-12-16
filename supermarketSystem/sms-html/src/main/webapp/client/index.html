@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>XN超市系统首页</title>
+    <script src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+    <link href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+    <link href="/assert/css/sider.css"  rel="stylesheet"/>
+
+    <script>
+        $(document).ready(function () {
+
+            //加载头部和左部
+            $('#head').load("/client/head.html");
+            $('#lefthead').load('/client/lefthead.html');
+//读取cookie
+            var Authorization=$.cookie('Authorization');
+            var username=$.cookie("username");
+            if (Authorization==null||username==null||Authorization==''||username==''){
+                window.location.href='/client/login.html';
+                return false;
+            }
+            //请求每日销售总额
+            $.ajax({
+
+                url:'http://localhost:8080/zuul_cash/findTotalPriceEveryDay?',
+                type:'post',
+                data:{
+                },
+                contentType:'application/x-www-form-urlencoded', //参数类型
+                timeout:50000,
+                headers:{"Authorization":"Bearer "+Authorization},
+                beforeSend:function(){
+                },
+                success:function (result) {
+                    $('#totalPriceEveryday').text(result);
+                },
+
+                error:function (xhr) {
+                    if (xhr.status=='404'){
+                        alert("请求失败，请刷新页面！");
+                    }else if (xhr.status=='403'||xhr.status=='401'){
+                        alert("您没有权限欧！")
+                    }else if (xhr.status=='500'){
+                        alert("服务器执行错误，请稍后再试！");
+                    }
+                }
+            });
+            //请求每日销售单数
+
+            $.ajax({
+
+                url:'http://localhost:8080/zuul_cash/findTransactionRecordNumber?',
+                type:'post',
+                data:{
+                },
+                contentType:'application/x-www-form-urlencoded', //参数类型
+                timeout:50000,
+                headers:{"Authorization":"Bearer "+Authorization},
+                beforeSend:function(){
+                },
+                success:function (result) {
+                    $('#TransactionRecordNumber').text(result);
+                },
+
+                error:function (xhr) {
+                    if (xhr.status=='404'){
+                        alert("请求失败，请刷新页面！");
+                    }else if (xhr.status=='403'||xhr.status=='401'){
+                        alert("您没有权限欧！")
+                    }else if (xhr.status=='500'){
+                        alert("服务器执行错误，请稍后再试！");
+                    }
+                }
+            });
+            //请求会员数量
+            $.ajax({
+
+                url:'http://localhost:8080/zuul_cash/findMemberNumber?',
+                type:'post',
+                data:{
+                },
+                contentType:'application/x-www-form-urlencoded', //参数类型
+                timeout:50000,
+                headers:{"Authorization":"Bearer "+Authorization},
+                beforeSend:function(){
+                },
+                success:function (result) {
+                    $('#MemberNumber').text(result);
+                },
+
+                error:function (xhr) {
+                    if (xhr.status=='404'){
+                        alert("请求失败，请刷新页面！");
+                    }else if (xhr.status=='403'||xhr.status=='401'){
+                        alert("您没有权限欧！")
+                    }else if (xhr.status=='500'){
+                        alert("服务器执行错误，请稍后再试！");
+                    }
+                }
+            });
+
+            //请求当天利润
+            $.ajax({
+
+                url:'http://localhost:8080/zuul_cash/findTotalProfitEveryDay?',
+                type:'post',
+                data:{
+                },
+                contentType:'application/x-www-form-urlencoded', //参数类型
+                timeout:50000,
+                headers:{"Authorization":"Bearer "+Authorization},
+                beforeSend:function(){
+                },
+                success:function (result) {
+                    $('#TotalProfitEveryDay').text(result);
+                },
+
+                error:function (xhr) {
+                    if (xhr.status=='404'){
+                        alert("请求失败，请刷新页面！");
+                    }else if (xhr.status=='403'||xhr.status=='401'){
+                        alert("您没有权限欧！")
+                    }else if (xhr.status=='500'){
+                        alert("服务器执行错误，请稍后再试！");
+                    }
+                }
+            });
+        });
+
+    </script>
+</head>
+<body>
+
+<!--head-->
+<div id="head"></div>
+
+<div class="container-fluid " style="padding-top: 1%;background-color:#E8E8E8;padding-left: 0px;padding-right: 0px;" >
+    <div class="row" style="height: 844px;" >
+
+<!--        左头-->
+        <div id="lefthead" class="sider col-md-2 pr-0 text-center"  style="background-color: #333333" fragment="sidebar"></div>
+
+
+        <div class="col-md-10 pl-2 pr-4"  >
+
+            <div class="container-fluid" style="background-color:#FFFFFF; padding-top: 8px;">
+                <span class="rightheadfont">今日销售</span>
+                <hr/>
+                <div class="row" style="padding: 2px">
+                    <div class="col-md-4 column" style="padding: 2px;" >
+                        <div class="goodcolor" style="margin-left: 10px;background-color: #FF6666;border-radius: 8px 8px 8px 8px;padding-left: 20px;">
+                            <h2>
+                                销售额
+                            </h2>
+                            <p>
+                                销售总额：<span id="totalPriceEveryday">0.00</span>元
+                            <hr/>
+                            <span>折扣:0.00</span><br/>
+                            <span>抹零:0.00</span>
+                            </p>
+                            <p>
+                                <a class="btn btn-group" href="#">详情</a>
+                            </p>
+                        </div>
+
+                    </div>
+                    <div class="col-md-4 column" style="padding: 2px;">
+                        <div class="goodcolor2" style="margin-right: 1px;background-color: #33FF66;border-radius: 8px 8px 8px 8px;padding-left: 20px;">
+                            <h2>
+                                销售单
+                            </h2>
+                            <p>
+                                销售单数：<span id="TransactionRecordNumber">0.00</span>单
+                            <hr/>
+                            <span>汇总:0.00</span><br/>
+                            <span>拆分:0.00</span>
+                            </p>
+                            <p>
+                                <a class="btn btn-group" href="#">详情</a>
+                            </p>
+                        </div>
+
+                    </div>
+                    <div class="col-md-4 column" style="padding: 2px;">
+                        <div class="goodcolor3" style="margin-right: 1px;background-color: #FFFF99;border-radius: 8px 8px 8px 8px;padding-left: 20px;">
+                            <h2>
+                                会员详情
+                            </h2>
+                            <p>
+                                会员人数：<span id="MemberNumber">0.00</span>人
+                            <hr/>
+                            <span>人数:0</span><br/>
+                            <span>等级:0</span>
+                            </p>
+                            <p>
+                                <a class="btn btn-group" href="#">详情</a>
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <div class="container-fluid" style="background-color:#FFFFFF;padding-top: 8px;">
+                <span class="rightheadfont">今日收入</span>
+                <hr/>
+                <div class="row">
+                    <div class="col-md-5" style="border-right: 1px #E8E8E8">
+                        <h2>总利润</h2>
+                        <span id="TotalProfitEveryDay" style="font-size: larger;color: #bd2130">0.00</span>元<br/>
+                        <span>单商品利润=商品交易价-成本价</span>
+                    </div>
+                    <div class="col-md-3">
+                        <span class="gryfont">现金</span><br/>
+                        <span>0.00</span><br/>
+                        <span class="gryfont">储蓄卡</span><br/>
+                        <span>0.00</span>
+                    </div>
+                    <div class="col-md-3">
+                        <span class="gryfont">思迅play</span><br/>
+                        <span>0.00</span><br/>
+                        <span class="gryfont">银行卡</span><br/>
+                        <span>0.00</span>
+                    </div>
+                    <div class="col-md-1">
+                        <span class="gryfont">支付宝</span><br/>
+                        <span>0.00</span><br/>
+                        <span class="gryfont">积分</span><br/>
+                        <span>0.00</span>
+                    </div>
+                </div>
+
+            </div>
+            <br/>
+            <div class="container-fluid" style="background-color:#FFFFFF;padding-top: 8px;">
+                <span class="rightheadfont">其他数据请求</span>
+                <input type="text" class="form-control-sm" style="margin-left: 10px;">
+                <button class="btn btn-success" style="margin-left: 10px;">搜索</button>
+                <hr/>
+                <div class="row" style="height: 150px;">
+                    <div class="col-md-12">
+                        <span class="gryfont">暂无数据</span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+</html>

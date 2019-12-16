@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>员工注册</title>
+    <!-- Bootstrap core CSS -->
+    <script src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+    <link href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+    <link href="/assert/css/sider.css" rel="stylesheet">
+    <style type="text/css">
+        /* Chart.js */
+
+        @-webkit-keyframes chartjs-render-animation {
+            from {
+                opacity: 0.99
+            }
+            to {
+                opacity: 1
+            }
+        }
+
+        @keyframes chartjs-render-animation {
+            from {
+                opacity: 0.99
+            }
+            to {
+                opacity: 1
+            }
+        }
+
+        .chartjs-render-monitor {
+            -webkit-animation: chartjs-render-animation 0.001s;
+            animation: chartjs-render-animation 0.001s;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            //加载头部和左部
+            $('#head').load("/client/head.html");
+            $('#lefthead').load('/client/lefthead.html');
+//读取cookie
+            var Authorization=$.cookie('Authorization');
+            var username=$.cookie("username");
+            if (Authorization==null||username==null||Authorization==''||username==''){
+                window.location.href='/client/login.html';
+                return false;
+            }
+
+
+            //注册
+            $('#register').click(function () {
+                var Authorization=$.cookie('Authorization');
+                var username=$.cookie("username");
+                if (Authorization==null||username==null||Authorization==''||username==''){
+                    window.location.href='/client/login.html';
+                    return false;
+                }
+                var employeeName=$('#employeeName').val();
+                var employeePassWord=$('#employeePassWord').val();
+                var employeeMobile=$('#employeeMobile').val();
+                var employeeIdCard=$('#employeeIdCard').val();
+                var employeeAuthoritie=$('#employeeAuthoritie').val();
+                $.ajax({
+                    type:'post',
+                    url:'http://localhost:8080/zuul_staff/registerEmployeeInformation?',
+                    headers:{"Authorization":"Bearer "+Authorization},
+
+                    data: {
+                        employeePassWord:employeeName,
+                        employeeName:employeeName,
+                        employeeMobile:employeeMobile,
+                        employeeIdCard:employeeIdCard,
+                        employeeAuthoritie:employeeAuthoritie
+                    },
+                    contentType:'application/x-www-form-urlencoded', //参数类型
+                    timeout:50000,
+                    beforeSend:function(){
+                        if($.trim(employeePassWord)==''||$.trim(employeeName)==''||$.trim(employeeMobile)==''||$.trim(employeeIdCard)==''
+                            ||$.trim(employeeAuthoritie)==''){
+                            alert('注册信息不能为空！');
+                            return false;
+                        }
+                    },
+
+                    success:function (result) {
+                        if (result!=0){
+                            alert('注册成功！您的工号为:'+result);
+                        }else {
+                            alert('注册失败！');
+                        }
+                    },
+
+                    error:function (xhr) {
+                        if (xhr.status=='404'){
+                            alert("请求失败，请刷新页面！");
+                        }else if (xhr.status=='403'){
+                            alert("您没有权限欧！")
+                        }else if (xhr.status=='500'){
+                            alert("您没有权限欧！");
+                            window.location.href='/client/index.html';
+                        }
+                    }
+                });
+            });
+        });
+
+
+    </script>
+</head>
+<body>
+<!--head-->
+<div id="head"></div>
+
+<div class="container-fluid " style="padding-top: 1%;background-color:#E8E8E8;padding-left: 0px;padding-right: 0px;" >
+    <div class="row" style="height: 844px;" >
+
+        <!--        左头-->
+        <div id="lefthead" class="sider col-md-2 pr-0 text-center"  style="background-color: #333333" fragment="sidebar"></div>
+
+<!--注册页-->
+        <div class="col-md-10 mx-auto" style="background-color:#FFFFFF; padding-top: 8px; margin-left: 20px;">
+            <div class="container-fluid col-md-5" >
+
+                    <!--发送put请求修改员工数据-->
+                    <!--
+                    1、SpringMVC中配置HiddenHttpMethodFilter;（SpringBoot自动配置好的）
+                    2、页面创建一个post表单
+                    3、创建一个input项，name="_method";值就是我们指定的请求方式
+                    -->
+                    <div class="form-group">
+                        <label>姓名</label>
+                        <input name="employeeName" id="employeeName" type="text" class="form-control" placeholder="张三">
+                    </div>
+                    <div class="form-group">
+                        <label>密码</label>
+                        <input name="employeePassWord" id="employeePassWord" type="password" class="form-control" >
+                    </div>
+                    <div class="form-group">
+                        <label>电话号</label><br/>
+                        <input name="employeeMobile" id="employeeMobile" type="text" class="form-control" placeholder="1598182274" >
+<!--                        <div class="form-check form-check-inline">-->
+<!--                            <input class="form-check-input" type="radio" name="gender" value="0" th:checked="${emp!=null}?${emp.gender==0}">-->
+<!--                            <label class="form-check-label">女</label>-->
+<!--                        </div>-->
+                    </div>
+                    <div class="form-group">
+                        <label>身份证号</label><br/>
+                        <input name="employeeIdCard" id="employeeIdCard" type="text" class="form-control" placeholder="410224199898552">
+                    </div>
+                    <div class="form-group">
+                        <label>角色</label>
+                        <select class="form-control" id="employeeAuthoritie" name="employeeAuthoritie">
+                            <option >店长</option>
+                            <option >总经理</option>
+                            <option >人事经理</option>
+                            <option >库存经理</option>
+                            <option >收银员</option>
+                            <option >库存管理员</option>
+                            <option >保洁员</option>
+                            <option >客服人员</option>
+                            <option >理货员</option>
+                            <option >推销员</option>
+                            <option >保安</option>
+                        </select>
+                    </div>
+
+                    <button  type="button" class="btn btn-primary " id="register">注册</button>
+
+            </div>
+        </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</body>
+</html>

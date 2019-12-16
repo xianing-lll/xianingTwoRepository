@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/sms_html_client/sms_html_client.iml" filepath="$PROJECT_DIR$/sms_html_client/sms_html_client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sms_server_auth2/sms_server_auth2.iml" filepath="$PROJECT_DIR$/sms_server_auth2/sms_server_auth2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sms_server_cash_register/sms_server_cash_register.iml" filepath="$PROJECT_DIR$/sms_server_cash_register/sms_server_cash_register.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sms_server_eureka/sms_server_eureka.iml" filepath="$PROJECT_DIR$/sms_server_eureka/sms_server_eureka.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sms_server_zuul/sms_server_gateway.iml" filepath="$PROJECT_DIR$/sms_server_zuul/sms_server_gateway.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sms_server_staff/sms_server_staff.iml" filepath="$PROJECT_DIR$/sms_server_staff/sms_server_staff.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sms_server_trade/sms_server_trade.iml" filepath="$PROJECT_DIR$/sms_server_trade/sms_server_trade.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/supermarket.iml" filepath="$PROJECT_DIR$/.idea/supermarket.iml" />
+    </modules>
+  </component>
+</project>

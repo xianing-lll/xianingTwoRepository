@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>会员注册</title>
+    <!-- Bootstrap core CSS -->
+    <script src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+    <link href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+    <link href="/assert/css/sider.css" rel="stylesheet">
+    <style type="text/css">
+        /* Chart.js */
+
+        @-webkit-keyframes chartjs-render-animation {
+            from {
+                opacity: 0.99
+            }
+            to {
+                opacity: 1
+            }
+        }
+
+        @keyframes chartjs-render-animation {
+            from {
+                opacity: 0.99
+            }
+            to {
+                opacity: 1
+            }
+        }
+
+        .chartjs-render-monitor {
+            -webkit-animation: chartjs-render-animation 0.001s;
+            animation: chartjs-render-animation 0.001s;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            //加载头部和左部
+            $('#head').load("/client/head.html");
+            $('#lefthead').load('/client/lefthead.html');
+//读取cookie
+            var Authorization=$.cookie('Authorization');
+            var username=$.cookie("username");
+            if (Authorization==null||username==null||Authorization==''||username==''){
+                window.location.href='/client/login.html';
+                return false;
+            }
+
+
+            //注册
+            $('#register').click(function () {
+
+                var membershipName=$('#membershipName').val();
+                var membershipPhone=$('#membershipPhone').val();
+                var membershipLevel=$('#membershipLevel').val();
+                var membershipBalance=$('#membershipBalance').val();
+
+                $.ajax({
+                    type:'post',
+                    url:'http://localhost:8080/zuul_cash/MemberRegister?',
+                    headers:{"Authorization":"Bearer "+Authorization},
+
+                    data: {
+                        membershipName:membershipName,
+                        membershipPhone:membershipPhone,
+                        membershipLevel:membershipLevel,
+                        membershipBalance:membershipBalance
+                    },
+                    contentType:'application/x-www-form-urlencoded', //参数类型
+                    timeout:50000,
+                    beforeSend:function(){
+                        if ($.trim(membershipName)==''||$.trim(membershipPhone)==''||$.trim(membershipLevel)==''||$.trim(membershipBalance)==''
+                        ){
+                            alert('注册信息不能为空！');
+                            return false;
+                        }
+                    },
+
+                    success:function (result) {
+                        if (result!=0){
+                            alert('注册成功！您的会员卡号为:'+result);
+                        }else {
+                            alert('注册失败！');
+                        }
+                    },
+
+                    error:function (xhr) {
+                        if (xhr.status=='404'){
+                            alert("请求失败，请刷新页面！");
+                        }else if (xhr.status=='403'){
+                            alert("您没有权限欧！")
+                        }else if (xhr.status=='500'){
+                            alert("您没有权限欧！");
+                            window.location.href='/client/index.html';
+                        }
+                    }
+                });
+            });
+        });
+
+
+    </script>
+</head>
+<body>
+<!--head-->
+<div id="head"></div>
+
+<div class="container-fluid " style="padding-top: 1%;background-color:#E8E8E8;padding-left: 0px;padding-right: 0px;" >
+    <div class="row" style="height: 844px;" >
+
+        <!--        左头-->
+        <div id="lefthead" class="sider col-md-2 pr-0 text-center"  style="background-color: #333333" fragment="sidebar"></div>
+
+        <!--注册页-->
+        <div class="col-md-10 mx-auto" style="background-color:#FFFFFF; padding-top: 8px; margin-left: 20px;">
+            <div class="container-fluid col-md-5" >
+
+                <div class="form-group">
+                    <label>姓名</label>
+                    <input name="membershipName" id="membershipName" type="text" class="form-control" placeholder="张三">
+                </div>
+
+                <div class="form-group">
+                    <label>电话号</label><br/>
+                    <input name="membershipPhone" id="membershipPhone" type="text" class="form-control" placeholder="1598182274" >
+                </div>
+
+                <div class="form-group">
+                    <label>会员等级</label>
+                    <select class="form-control" id="membershipLevel" name="membershipLevel">
+                        <option >普通会员</option>
+                        <option >白银会员</option>
+                        <option >黄金会员</option>
+                        <option >钻石会员</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>充值金额</label><br/>
+                    <input name="membershipBalance" id="membershipBalance" type="text" class="form-control" >
+                </div>
+
+                <button  type="button" class="btn btn-primary " id="register">注册会员</button>
+
+            </div>
+        </div>
+
+
+    </div>
+</div>
+</div>
+
+</body>
+</html>

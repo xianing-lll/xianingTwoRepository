@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link href="assert/css/sider.css" th:href="@{assert/css/sider.css}" rel="stylesheet">
+</head>
+<body>
+
+<!--topbar-->
+<div  class="container-fluid"  style="padding-top: 6px;padding-left: 20px;" th:fragment="topbar">
+        <div class="row">
+            <div class="col-md-3">
+                <img th:src="@{/assert/img/user.png}" style="width: 37px;height: 37px;">
+                <span class="text-info" >员工号：</span>&nbsp;
+                <span class="topfont">姓名：<span  sec:authentication="name"></span></span>&nbsp;&nbsp;&nbsp;
+				<span class="topfont">职位:<span sec:authentication="principal.getAuthorities()"></span></span>
+
+            </div>
+            <div class="col-md-3">
+                <img th:src="@{/assert/img/erweima.png}" style="width: 33px;height: 33px;">
+
+            </div>
+            <div class="col-md-3">
+                <div style="padding-top: 4px;">
+                    <img th:src="@{/assert/img/qq.png}">
+                    <span class="gryfont">意见与反馈</span>
+                </div>
+
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-info" >订单管理</button>
+                <button class="btn btn-warning">优惠活动</button>
+                <button class="btn btn-danger">注销</button>
+            </div>
+        </div>
+</div>
+
+
+
+<!--sidebar-->
+
+				<div class="sider col-md-2 text-center"   th:fragment="sidebar">
+
+					<div class="container-fluid" style="padding-right: 0px;padding-left: 0px">
+						<div id="accordion">
+							<div class="card">
+								<div class="card-header">
+									<a class="card-link card-link" data-toggle="collapse" href="#collapseOne">
+										前台收银
+									</a>
+								</div>
+								<div id="collapseOne" class="collapse show" data-parent="#accordion">
+									<div class="card-body" style="padding: 0px;">
+										<a href="#" th:href="@{/main}">
+											<div style="width:100%;height:40px;padding-top: 5px;text-align: center"><span class="sidersfont" style="color: #1b1e21">收银</span></div>
+										</a>
+										<a href="#" th:href="@{/main}">
+											<div style="width:100%;height:40px;padding-top: 5px;text-align: center"><span class="sidersfont" style="color: #1b1e21">注册会员</span></div>
+										</a>
+										<a href="#" th:href="@{/main}">
+											<div style="width:100%;height:40px;padding-top: 5px;text-align: center"><span class="sidersfont" style="color: #1b1e21">会员管理</span></div>
+										</a>
+									</div>
+								</div>
+							</div>
+
+
+
+
+							<div class="card">
+								<div class="card-header">
+									<a class="collapsed card-link" data-toggle="collapse" href="#collapseTwo">
+										库存管理
+									</a>
+								</div>
+								<div id="collapseTwo" class="collapse" data-parent="#accordion">
+									<div class="card-body" style="padding: 0px;">
+										<a href="#" th:href="@{/main}">
+											<div style="width:100%;height:40px;padding-top: 5px;text-align: center"><span class="sidersfont" style="color: #1b1e21">添加商品</span></div>
+										</a>
+										<a href="#" th:href="@{/main}">
+											<div style="width:100%;height:40px;padding-top: 5px;text-align: center"><span class="sidersfont" style="color: #1b1e21">商品预警</span></div>
+										</a>
+										<a href="#" th:href="@{/main}">
+											<div style="width:100%;height:40px;padding-top: 5px;text-align: center"><span class="sidersfont" style="color: #1b1e21">会员标注</span></div>
+										</a>
+										<a href="#" th:href="@{/main}">
+											<div style="width:100%;height:40px;padding-top: 5px;text-align: center"><span class="sidersfont" style="color: #1b1e21">供货商</span></div>
+										</a>
+										<a href="#" th:href="@{/main}">
+											<div style="width:100%;height:40px;padding-top: 5px;text-align: center"><span class="sidersfont" style="color: #1b1e21">销售月榜</span></div>
+										</a>
+									</div>
+								</div>
+							</div>
+							<div class="card">
+								<div class="card-header">
+									<a class="collapsed card-link" data-toggle="collapse" href="#collapseThree">
+										员工管理
+									</a>
+								</div>
+								<div id="collapseThree" class="collapse" data-parent="#accordion">
+									<div class="card-body" style="padding: 0px;">
+										<a href="#" th:href="@{/main}">
+											<div style="width:100%;height:40px;padding-top: 5px;text-align: center"><span class="sidersfont" style="color: #1b1e21">员工注册</span></div>
+										</a>
+										<a href="#" th:href="@{/main}">
+											<div style="width:100%;height:40px;padding-top: 5px;text-align: center"><span class="sidersfont" style="color: #1b1e21">注册审批</span></div>
+										</a>
+										<a href="#" th:href="@{/main}">
+											<div style="width:100%;height:40px;padding-top: 5px;text-align: center"><span class="sidersfont" style="color: #1b1e21">职位调整</span></div>
+										</a>
+										<a href="#" th:href="@{/main}">
+											<div style="width:100%;height:40px;padding-top: 5px;text-align: center"><span class="sidersfont" style="color: #1b1e21">工资查询</span></div>
+										</a>
+										<a href="#" th:href="@{/main}">
+											<div style="width:100%;height:40px;padding-top: 5px;text-align: center"><span class="sidersfont" style="color: #1b1e21">请假处理</span></div>
+										</a>
+										<a href="#" th:href="@{/main}">
+											<div style="width:100%;height:40px;padding-top: 5px;text-align: center"><span class="sidersfont" style="color: #1b1e21">离职处理</span></div>
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!--<div class="siders" >
+                        <a th:href="@{/main}">
+                            <img class="sidersimg" th:src="@{/assert/img/1.png}"/><span class="sidersfont">总界面</span>
+                        </a>
+                    </div>
+                    <div class="siders">
+                        <a th:href="@{/emps}">
+                            <img class="sidersimg" th:src="@{/assert/img/2.png}"/><span class="sidersfont">员工</span>
+                        </a>
+                    </div>
+                    <div class="siders">
+                        <a th:href="@{/product}">
+                            <img class="sidersimg" th:src="@{/assert/img/3.png}"/><span class="sidersfont">商品</span>
+                        </a>
+                    </div>
+                    <div class="siders">
+                        <a th:href="@{/product}">
+                            <img class="sidersimg" th:src="@{/assert/img/1.png}"/><span class="sidersfont">商品</span>
+                        </a>
+                    </div>
+                    <div class="siders">
+                        <a th:href="@{/product}">
+                            <img class="sidersimg" th:src="@{/assert/img/1.png}"/><span class="sidersfont">商品</span>
+                        </a>
+                    </div>
+                    <div class="siders">
+                        <a th:href="@{/product}">
+                            <img class="sidersimg" th:src="@{/assert/img/1.png}"/><span class="sidersfont">商品</span>
+                        </a>
+                    </div>
+                    <div class="siders">
+                        <a th:href="@{/product}">
+                            <img class="sidersimg" th:src="@{/assert/img/1.png}"/><span class="sidersfont">商品</span>
+                        </a>
+                    </div>
+                    <div class="siders">
+                        <a th:href="@{/product}">
+                            <img class="sidersimg" th:src="@{/assert/img/1.png}"/><span class="sidersfont">商品</span>
+                        </a>
+                    </div>-->
+
+				</div>
+
+
+</body>
+</html>

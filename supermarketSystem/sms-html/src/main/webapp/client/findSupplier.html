@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)http://getbootstrap.com/docs/4.0/examples/dashboard/ -->
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>供货商管理</title>
+    <script src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+    <link href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+    <link href="/assert/css/sider.css" rel="stylesheet">
+    <style type="text/css">
+        /* Chart.js */
+
+        @-webkit-keyframes chartjs-render-animation {
+            from {
+                opacity: 0.99
+            }
+            to {
+                opacity: 1
+            }
+        }
+
+        @keyframes chartjs-render-animation {
+            from {
+                opacity: 0.99
+            }
+            to {
+                opacity: 1
+            }
+        }
+
+        .chartjs-render-monitor {
+            -webkit-animation: chartjs-render-animation 0.001s;
+            animation: chartjs-render-animation 0.001s;
+        }
+    </style>
+    <script>
+
+
+
+        $(document).ready(function () {
+            //加载头部和左部
+            $('#head').load("/client/head.html");
+            $('#lefthead').load('/client/lefthead.html');
+//读取cookie
+            var Authorization=$.cookie('Authorization');
+            var username=$.cookie("username");
+            if (Authorization==null||username==null||Authorization==''||username==''){
+                window.location.href='/client/login.html';
+                return false;
+            }
+
+
+
+
+            //加载供货商信息
+            $.ajax({
+                type:'post',
+                url:'http://localhost:8080/zuul_trade/findAllSupplier?',
+                headers:{"Authorization":"Bearer "+Authorization},
+                data: {
+                },
+                contentType:'application/x-www-form-urlencoded', //参数类型
+                timeout:50000,
+                success:function (result) { //该函数会自动把JSON解析为对象
+
+                    $.each(result,function (key,value) {
+                        //整体
+                        var html='';
+                        html+='<tr id="remove"><td>'+(key+1)+'</td>'+
+                            '<td>'+result[key].supplierId+'</td>'+
+                            '<td>'+result[key].company+'</td>'+
+                            '<td>'+result[key].deliverer+'</td>'+
+                            '<td>'+result[key].tradeName+'</td>'+
+                            '<td>'+result[key].phone+'</td>'+
+                            '<td><button onclick="deleteSupplier('+result[key].supplierId+')" class="btn btn-sm btn-danger deleteBtn">删除</button></td>'+
+                            '<td><button onclick="shouSupplier('+result[key].supplierId+')" class="btn btn-sm btn-primary deleteBtn" data-toggle="modal" data-target="#shouSupplier" >修改</button></td>'+
+                            '</tr>';
+                        //
+                        $('#tbody').append(html);
+                    });
+
+                },
+                error:function (xhr) {
+                    if (xhr.status=='404'){
+                        alert("请求失败，请刷新页面！");
+                    }else if (xhr.status=='403'){
+                        alert("您没有权限欧！")
+                        window.location.href='/client/index.html';
+                    }else if (xhr.status=='500'){
+                        alert("您没有权限欧！");
+                        window.location.href='/client/index.html';
+                    }
+                }
+            });
+
+
+            //添加一个供货商
+            $('#addSupplier').click(function () {
+                //alert("供货商");
+                var company=$('#company').val();
+                var deliverer=$('#deliverer').val();
+                var tradeName=$('#tradeName').val();
+                var phone=$('#phone').val();
+                if ($.trim(company)==''||$.trim(deliverer)==''||$.trim(tradeName)==''||$.trim(phone)==''
+                ){
+                    alert('输入信息不能为空！');
+                    return false;
+                }
+                $.ajax({
+                    url:'http://localhost:8080/zuul_trade/addSupplier?',
+                    type:'POST',
+                    data:{
+                        company:company,
+                        deliverer:deliverer,
+                        tradeName:tradeName,
+                        phone:phone
+                    },
+                    contentType:'application/x-www-form-urlencoded', //参数类型
+                    timeout:50000,
+                    headers:{"Authorization":"Bearer "+Authorization},
+                    beforeSend:function(){
+                        if (!confirm("是否确认？")){
+                            return false;
+                        }
+                    },
+                    success:function (result) {
+                        if (result==true){
+                            alert('已成功执行该操作！');
+                            window.location.reload();
+                        }
+                    },
+                    error:function (xhr) {
+                        if (xhr.status=='404'){
+                            alert("请求失败，请刷新页面！");
+                        }else if (xhr.status=='403'||xhr.status=='401'){
+                            alert("您没有权限欧！")
+                        }else if (xhr.status=='500'){
+                            alert("账号已过期，请重新登录！");
+                            window.location.href='/client/login.html';
+                        }
+                    }
+                });
+            });
+
+            //修改一个供货商
+            $('#updateSupplier').click(function () {
+                //alert("供货商");
+                var supplierId=$('#UpdateSupplierId').text();
+                var company=$('#UpdadeCompany').val();
+                var deliverer=$('#UpdadeDeliverer').val();
+                var tradeName=$('#UpdadeTradeName').val();
+                var phone=$('#UpdadePhone').val();
+
+                if ($.trim(company)==''||$.trim(deliverer)==''||$.trim(tradeName)==''||$.trim(phone)==''
+                ){
+                    alert('输入信息不能为空！');
+                    return false;
+                }
+                $.ajax({
+                    url:'http://localhost:8080/zuul_trade/updateSupplierBySupplierId?',
+                    type:'POST',
+                    data:{
+                        supplierId:supplierId,
+                        company:company,
+                        deliverer:deliverer,
+                        tradeName:tradeName,
+                        phone:phone
+                    },
+                    contentType:'application/x-www-form-urlencoded', //参数类型
+                    timeout:50000,
+                    headers:{"Authorization":"Bearer "+Authorization},
+                    beforeSend:function(){
+                        if (!confirm("是否确认？")){
+                            return false;
+                        }
+                    },
+                    success:function (result) {
+                        if (result==true){
+                            alert('已成功更新该供货商！');
+                            window.location.reload();
+                        }
+                    },
+                    error:function (xhr) {
+                        if (xhr.status=='404'){
+                            alert("请求失败，请刷新页面！");
+                        }else if (xhr.status=='403'||xhr.status=='401'){
+                            alert("您没有权限欧！")
+                        }else if (xhr.status=='500'){
+                            alert("账号已过期，请重新登录！");
+                            window.location.href='/client/login.html';
+                        }
+                    }
+                });
+            });
+        });
+
+        //删除一个供货商
+        function deleteSupplier(supplierId) {
+            //alert(supplierId);
+            var Authorization=$.cookie('Authorization');
+            var username=$.cookie("username");
+            if (Authorization==null||username==null||Authorization==''||username==''){
+                window.location.href='/client/login.html';
+                return false;
+            }
+            $.ajax({
+                url:'http://localhost:8080/zuul_trade/deleteSupplierBySupplierId?',
+                type:'POST',
+                data:{
+                    supplierId:supplierId
+                },
+                contentType:'application/x-www-form-urlencoded', //参数类型
+                timeout:50000,
+                headers:{"Authorization":"Bearer "+Authorization},
+                beforeSend:function(){
+                    if (!confirm("是否确认删除该供货商？")){
+                        return false;
+                    }
+                },
+                success:function (result) {
+                    if (result==true){
+                        alert('已成功执行该操作！');
+                        window.location.reload();
+                    }
+                },
+                error:function (xhr) {
+                    if (xhr.status=='404'){
+                        alert("请求失败，请刷新页面！");
+                    }else if (xhr.status=='403'||xhr.status=='401'){
+                        alert("您没有权限欧！")
+                    }else if (xhr.status=='500'){
+                        alert("服务器执行错误，请稍后再试！");
+                    }
+                }
+            });
+        }
+
+        //展示要修改的供货商信息
+        function shouSupplier(supperId) {
+            var Authorization=$.cookie('Authorization');
+            var username=$.cookie("username");
+            if (Authorization==null||username==null||Authorization==''||username==''){
+                window.location.href='/client/login.html';
+                return false;
+            }
+            $.ajax({
+                url:'http://localhost:8080/zuul_trade/findSupplierBySupplierId?',
+                type:'POST',
+                data:{
+                    supplierId:supperId
+                },
+                contentType:'application/x-www-form-urlencoded', //参数类型
+                timeout:50000,
+                headers:{"Authorization":"Bearer "+Authorization},
+                beforeSend:function(){
+                },
+                success:function (result) {
+                    $('#UpdateSupplierId').text(result.supplierId)
+                    $('#UpdadeCompany').val(result.company);
+                    $('#UpdadeDeliverer').val(result.deliverer);
+                    $('#UpdadeTradeName').val(result.tradeName);
+                    $('#UpdadePhone').val(result.phone);
+                },
+                error:function (xhr) {
+                    if (xhr.status=='404'){
+                        alert("请求失败，请刷新页面！");
+                    }else if (xhr.status=='403'||xhr.status=='401'){
+                        alert("您没有权限欧！")
+                    }else if (xhr.status=='500'){
+                        alert("账号已过期，请重新登录！");
+                        window.location.href='/client/login.html';
+                    }
+                }
+            });
+        }
+    </script>
+</head>
+
+<body>
+<!--head-->
+<div id="head"></div>
+
+<div class="container-fluid " style="padding-top: 1%;background-color:#E8E8E8;padding-left: 0px;padding-right: 0px;" >
+    <div class="row" style="height: 844px;" >
+
+        <!--        左头-->
+        <div id="lefthead" class="sider col-md-2 pr-0 text-center"  style="background-color: #333333" fragment="sidebar"></div>
+
+
+
+        <div class="col-md-10">
+            <div class="container-fluid" style="background-color:#FFFFFF; padding-top: 8px;">
+
+                <div class="input-group row" >
+
+                    <div class="col-md-10"></div>
+                    <div class="col-md-2 input-group mx-auto">
+                        <button type="button"  class="btn btn-primary" data-toggle="modal" data-target="#shou" data-whatever="@mdo" style="float: right;">添加供货商</button>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-sm">
+                        <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>供货商ID</th>
+                            <th>公司</th>
+                            <th>负责人</th>
+                            <th>商品</th>
+                            <th>电话</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tbody">
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--添加供货商模态框组-->
+<div class="modal fade" id="shou" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-header" >添加供货商</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">公司名称:</label>
+                        <input type="text" class="form-control" id="company">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">负责人:</label>
+                        <input type="text" class="form-control" id="deliverer">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">商品名称:</label>
+                        <input type="text" class="form-control" id="tradeName">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">联系电话:</label>
+                        <input type="text" class="form-control" id="phone">
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-dismiss="modal" style="width: auto;">关闭</button>
+                <button id="addSupplier" type="button" class="btn btn-success" style="width: auto;">添加</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--展示供货商信息模态框组-->
+<div class="modal fade" id="shouSupplier" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-header" id="exampleModalLabel">供货商修改</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">供货商ID:</label>
+                        <span id="UpdateSupplierId"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">公司名称:</label>
+                        <input type="text" class="form-control" id="UpdadeCompany">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">负责人:</label>
+                        <input type="text" class="form-control" id="UpdadeDeliverer">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">商品名称:</label>
+                        <input type="text" class="form-control" id="UpdadeTradeName">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">联系电话:</label>
+                        <input type="text" class="form-control" id="UpdadePhone">
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-dismiss="modal" style="width: auto;">关闭</button>
+                <button id="updateSupplier" type="button" class="btn btn-success" style="width: auto;">修改</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+
+</html>
