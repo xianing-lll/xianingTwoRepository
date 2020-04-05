@@ -47,7 +47,22 @@ class Frame(object):
         newnetsent=psutil.net_io_counters().packets_sent
         revspeed=newnetrev-self.oldrev
         sendspeed=newnetsent-self.oldsent
-        self.labelnet.configure(text='↑'+str(sendspeed)+'k/s'+' ↓'+str(revspeed)+'k/s')
+        strrev=str(revspeed)+'k/s'
+        strsend=str(sendspeed)+'k/s'
+        if revspeed>=1024:
+            revspeed=revspeed/1024
+            strrev=str(format(revspeed,'.1f'))+'M/s'
+        if sendspeed>=1024:
+            sendspeed=sendspeed/1024
+            strsend=str(format(sendspeed,'.1f'))+'M/s'
+        # 换算成G
+        if revspeed >= 1048576:
+            revspeed = revspeed / 1048576
+            strrev = str(format(revspeed, '.2f')) + 'G/s'
+        if sendspeed >= 1048576:
+            sendspeed = sendspeed / 1048576
+            strsend = str(format(sendspeed, '.2f')) + 'G/s'
+        self.labelnet.configure(text='↑'+strsend+' ↓'+strrev)
         self.oldrev=newnetrev
         self.oldsent=newnetsent
         # 内存

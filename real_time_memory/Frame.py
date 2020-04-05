@@ -27,15 +27,17 @@ class Frame(object):
         self.window.resizable(width=False, height=False)
         self.label = tk.Label(self.window, text="253", bg=themecolcor, font=('Arial', 10))
         self.label.pack()
-        self.progressbar = ttk.Progressbar(self.window, length=100, cursor='spider', mode="determinate", orient=tk.HORIZONTAL)
+        self.progressbar = ttk.Progressbar(self.window, length=100, cursor='spider', mode="determinate",
+                                           orient=tk.HORIZONTAL)
         self.progressbar.pack()
         self.labelcpu = tk.Label(self.window, text="", bg=themecolcor, font=('Arial', 10))
         self.labelcpu.pack()
-        self.progressbarcpu = ttk.Progressbar(self.window, length=100, cursor='spider', mode="determinate", orient=tk.HORIZONTAL)
+        self.progressbarcpu = ttk.Progressbar(self.window, length=100, cursor='spider', mode="determinate",
+                                              orient=tk.HORIZONTAL)
         self.progressbarcpu.pack()
         # 网速检测
-        self.oldrev=psutil.net_io_counters().packets_recv
-        self.oldsent=psutil.net_io_counters().packets_sent
+        self.oldrev = psutil.net_io_counters().packets_recv
+        self.oldsent = psutil.net_io_counters().packets_sent
         self.labelnet = tk.Label(self.window, text="", bg=themecolcor, font=('Arial', 10))
         self.labelnet.pack()
         self.update_data()
@@ -43,20 +45,36 @@ class Frame(object):
 
     def update_data(self):
         # 网速
-        newnetrev=psutil.net_io_counters().packets_recv
-        newnetsent=psutil.net_io_counters().packets_sent
-        revspeed=newnetrev-self.oldrev
-        sendspeed=newnetsent-self.oldsent
-        self.labelnet.configure(text='↑'+str(sendspeed)+'k/s'+' ↓'+str(revspeed)+'k/s')
-        self.oldrev=newnetrev
-        self.oldsent=newnetsent
+        newnetrev = psutil.net_io_counters().packets_recv
+        newnetsent = psutil.net_io_counters().packets_sent
+        revspeed = newnetrev - self.oldrev
+        sendspeed = newnetsent - self.oldsent
+        strrev = str(revspeed) + 'k/s'
+        strsend = str(sendspeed) + 'k/s'
+        # 换算成M
+        if revspeed >= 1024:
+            revspeed = revspeed / 1024
+            strrev = str(format(revspeed, '.1f')) + 'M/s'
+        if sendspeed >= 1024:
+            sendspeed = sendspeed / 1024
+            strsend = str(format(sendspeed, '.1f')) + 'M/s'
+        # 换算成G
+        if revspeed >= 1048576:
+            revspeed = revspeed / 1048576
+            strrev = str(format(revspeed, '.2f')) + 'G/s'
+        if sendspeed >= 1048576:
+            sendspeed = sendspeed / 1048576
+            strsend = str(format(sendspeed, '.2f')) + 'G/s'
+        self.labelnet.configure(text='↑' + strsend + ' ↓' + strrev)
+        self.oldrev = newnetrev
+        self.oldsent = newnetsent
         # 内存
         info = psutil.virtual_memory().percent
         tex = '内存: ' + str(info) + '%'
         self.label.configure(text=tex)
         self.progressbar["value"] = 100 * info * 0.01
         # cpu
-        cpu_percent=psutil.cpu_percent(interval=1, percpu=False)
+        cpu_percent = psutil.cpu_percent(interval=1, percpu=False)
         texcpu = 'cpu : ' + str(cpu_percent) + '%'
         self.labelcpu.configure(text=texcpu)
         self.progressbarcpu["value"] = 100 * cpu_percent * 0.01
@@ -66,7 +84,3 @@ class Frame(object):
 
 frame = Frame()
 frame.init()
-
-
-
-

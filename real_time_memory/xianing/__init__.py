@@ -1,3 +1,4 @@
+import math
 import time
 import tkinter as tk
 import psutil
@@ -14,10 +15,6 @@ import psutil
 #
 # for i in range(0,10):
 #     print(psutil.net_io_counters())
-old = psutil.net_io_counters().packets_recv
-time.sleep(1)
-for i in range(0, 50):
-    new = psutil.net_io_counters().packets_recv
-    print(new - old)
-    old = new
-    time.sleep(1)
+
+a=math.sqrt(147440)
+print(a)
