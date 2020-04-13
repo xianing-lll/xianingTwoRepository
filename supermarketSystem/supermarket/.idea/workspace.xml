@@ -55,9 +55,9 @@
       <recent name="F:\备用javaweb\supermarket\sms_html_client\src\main\resources\templates" />
     </key>
   </component>
-  <component name="RunManager" selected="Spring Boot.SmsServerTradeApplication">
-    <configuration name="SmsServerCashRegisterApplicationTests.contextLoads" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="sms_server_cash_register" />
+  <component name="RunManager" selected="JUnit.StaffRedisTest.find">
+    <configuration name="StaffRedisTest.fenBuShiSock" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="sms_server_staff" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="com.example.*" />
@@ -65,15 +65,15 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="com.example" />
-      <option name="MAIN_CLASS_NAME" value="com.example.SmsServerCashRegisterApplicationTests" />
-      <option name="METHOD_NAME" value="contextLoads" />
+      <option name="MAIN_CLASS_NAME" value="com.example.StaffRedisTest" />
+      <option name="METHOD_NAME" value="fenBuShiSock" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SmsServerCashRegisterApplicationTests.test2" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="sms_server_cash_register" />
+    <configuration name="StaffRedisTest.find" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="sms_server_staff" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="com.example.*" />
@@ -81,15 +81,15 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="com.example" />
-      <option name="MAIN_CLASS_NAME" value="com.example.SmsServerCashRegisterApplicationTests" />
-      <option name="METHOD_NAME" value="test2" />
+      <option name="MAIN_CLASS_NAME" value="com.example.StaffRedisTest" />
+      <option name="METHOD_NAME" value="find" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SmsServerCashRegisterApplicationTests.testRedis" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="sms_server_cash_register" />
+    <configuration name="StaffRedisTest.liuShuiXian" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="sms_server_staff" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="com.example.*" />
@@ -97,15 +97,15 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="com.example" />
-      <option name="MAIN_CLASS_NAME" value="com.example.SmsServerCashRegisterApplicationTests" />
-      <option name="METHOD_NAME" value="testRedis" />
+      <option name="MAIN_CLASS_NAME" value="com.example.StaffRedisTest" />
+      <option name="METHOD_NAME" value="liuShuiXian" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SmsServerTradeApplicationTests.findAllTrades" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="sms_server_trade" />
+    <configuration name="StaffRedisTest.testduqu" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="sms_server_staff" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="com.example.*" />
@@ -113,15 +113,15 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="com.example" />
-      <option name="MAIN_CLASS_NAME" value="com.example.SmsServerTradeApplicationTests" />
-      <option name="METHOD_NAME" value="findAllTrades" />
+      <option name="MAIN_CLASS_NAME" value="com.example.StaffRedisTest" />
+      <option name="METHOD_NAME" value="testduqu" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SmsServerTradeApplicationTests.test3" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="sms_server_trade" />
+    <configuration name="StaffRedisTest.testredisTemplate" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="sms_server_staff" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="com.example.*" />
@@ -129,8 +129,8 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="com.example" />
-      <option name="MAIN_CLASS_NAME" value="com.example.SmsServerTradeApplicationTests" />
-      <option name="METHOD_NAME" value="test3" />
+      <option name="MAIN_CLASS_NAME" value="com.example.StaffRedisTest" />
+      <option name="METHOD_NAME" value="testredisTemplate" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -187,11 +187,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.SmsServerCashRegisterApplicationTests.test2" />
-        <item itemvalue="JUnit.SmsServerCashRegisterApplicationTests.testRedis" />
-        <item itemvalue="JUnit.SmsServerTradeApplicationTests.test3" />
-        <item itemvalue="JUnit.SmsServerTradeApplicationTests.findAllTrades" />
-        <item itemvalue="JUnit.SmsServerCashRegisterApplicationTests.contextLoads" />
+        <item itemvalue="JUnit.StaffRedisTest.find" />
+        <item itemvalue="JUnit.StaffRedisTest.liuShuiXian" />
+        <item itemvalue="JUnit.StaffRedisTest.fenBuShiSock" />
+        <item itemvalue="JUnit.StaffRedisTest.testredisTemplate" />
+        <item itemvalue="JUnit.StaffRedisTest.testduqu" />
       </list>
     </recent_temporary>
   </component>
@@ -237,6 +237,24 @@
       <workItem from="1576316421916" duration="13077000" />
       <workItem from="1576378982443" duration="13937000" />
       <workItem from="1576401496733" duration="3730000" />
+      <workItem from="1576483697487" duration="443000" />
+      <workItem from="1576828876783" duration="4254000" />
+      <workItem from="1576918799442" duration="7942000" />
+      <workItem from="1577443440376" duration="313000" />
+      <workItem from="1577582477757" duration="5680000" />
+      <workItem from="1577960828162" duration="585000" />
+      <workItem from="1578045578276" duration="11190000" />
+      <workItem from="1578112987662" duration="5000" />
+      <workItem from="1578114612318" duration="75000" />
+      <workItem from="1578114763792" duration="14108000" />
+      <workItem from="1578365267181" duration="11249000" />
+      <workItem from="1579176669505" duration="20000" />
+      <workItem from="1580105634334" duration="665000" />
+      <workItem from="1585145690001" duration="504000" />
+      <workItem from="1585146311877" duration="4069000" />
+      <workItem from="1585151591062" duration="309000" />
+      <workItem from="1585202770229" duration="339000" />
+      <workItem from="1585204429700" duration="22000" />
     </task>
     <servers />
   </component>
@@ -244,69 +262,53 @@
     <option name="version" value="1" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="361" y="73" key="#Project_Structure" timestamp="1575360596503">
+    <state x="399" y="220" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1585150299314">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="361" y="73" key="#Project_Structure/0.0.1536.824@0.0.1536.824" timestamp="1575360596503" />
-    <state x="574" y="120" key="#com.intellij.ide.util.MemberChooser" timestamp="1576418903261">
+    <state x="399" y="220" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1536.824@0.0.1536.824" timestamp="1585150299314" />
+    <state x="574" y="120" key="#com.intellij.ide.util.MemberChooser" timestamp="1578128649226">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="574" y="120" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824@0.0.1536.824" timestamp="1576418903261" />
-    <state x="380" y="340" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog" timestamp="1575532199603">
+    <state x="574" y="120" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824@0.0.1536.824" timestamp="1578128649226" />
+    <state width="1493" height="202" key="GridCell.Tab.0.bottom" timestamp="1585203116022">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="380" y="340" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog/0.0.1536.824@0.0.1536.824" timestamp="1575532199603" />
-    <state x="549" y="105" key="FileChooserDialogImpl" timestamp="1575420438020">
+    <state width="1493" height="202" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1585203116022" />
+    <state width="1493" height="202" key="GridCell.Tab.0.center" timestamp="1585203116022">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="549" y="105" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1575420438020" />
-    <state width="1493" height="210" key="GridCell.Tab.0.bottom" timestamp="1576420522844">
+    <state width="1493" height="202" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1585203116022" />
+    <state width="1493" height="202" key="GridCell.Tab.0.left" timestamp="1585203116022">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1576420522844" />
-    <state width="1493" height="210" key="GridCell.Tab.0.center" timestamp="1576420522844">
+    <state width="1493" height="202" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1585203116022" />
+    <state width="1493" height="202" key="GridCell.Tab.0.right" timestamp="1585203116022">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1576420522844" />
-    <state width="1493" height="210" key="GridCell.Tab.0.left" timestamp="1576420522844">
+    <state width="1493" height="202" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1585203116022" />
+    <state width="1493" height="252" key="GridCell.Tab.1.bottom" timestamp="1578068054837">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1576420522844" />
-    <state width="1493" height="210" key="GridCell.Tab.0.right" timestamp="1576420522844">
+    <state width="1493" height="252" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1578068054837" />
+    <state width="1493" height="252" key="GridCell.Tab.1.center" timestamp="1578068054837">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1576420522844" />
-    <state width="1493" height="210" key="GridCell.Tab.1.bottom" timestamp="1576420522844">
+    <state width="1493" height="252" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1578068054837" />
+    <state width="1493" height="252" key="GridCell.Tab.1.left" timestamp="1578068054837">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1576420522844" />
-    <state width="1493" height="210" key="GridCell.Tab.1.center" timestamp="1576420522844">
+    <state width="1493" height="252" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1578068054837" />
+    <state width="1493" height="252" key="GridCell.Tab.1.right" timestamp="1578068054837">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1576420522844" />
-    <state width="1493" height="210" key="GridCell.Tab.1.left" timestamp="1576420522844">
+    <state width="1493" height="252" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1578068054837" />
+    <state x="499" y="70" key="com.intellij.troubleshooting.ui.CollectTroubleshootingInformationDialog" timestamp="1580106215587">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1576420522844" />
-    <state width="1493" height="210" key="GridCell.Tab.1.right" timestamp="1576420522844">
+    <state x="499" y="70" key="com.intellij.troubleshooting.ui.CollectTroubleshootingInformationDialog/0.0.1536.824@0.0.1536.824" timestamp="1580106215587" />
+    <state x="178" y="139" key="new project wizard" timestamp="1580106310371">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1576420522844" />
-    <state x="408" y="115" key="NewModule_or_Project.wizard" timestamp="1575345390879">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state x="408" y="115" key="NewModule_or_Project.wizard/0.0.1536.824@0.0.1536.824" timestamp="1575345390879" />
-    <state x="249" y="0" key="SettingsEditor" timestamp="1575361063998">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state x="249" y="0" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1575361063998" />
-    <state x="178" y="139" key="new project wizard" timestamp="1576319817494">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state x="178" y="139" key="new project wizard/0.0.1536.824@0.0.1536.824" timestamp="1576319817494" />
-    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup" timestamp="1575617251557">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1575617251557" />
+    <state x="178" y="139" key="new project wizard/0.0.1536.824@0.0.1536.824" timestamp="1580106310371" />
   </component>
 </project>
