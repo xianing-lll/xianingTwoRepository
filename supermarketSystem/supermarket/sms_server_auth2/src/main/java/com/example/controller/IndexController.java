@@ -29,7 +29,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
 
-
+/**
+ * 该类没用，仅为测试用
+ */
 @Controller
 public class IndexController {
 
